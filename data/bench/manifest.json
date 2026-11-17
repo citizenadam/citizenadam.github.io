@@ -1,0 +1,22 @@
+{
+  "$schema": "./schema/manifest.schema.json",
+  "files": [
+    "runs.jsonl",
+    "summary.json",
+    "models.json",
+    "tasks.json"
+  ],
+  "generated_at": "2026-11-17T22:03:51.208468911Z",
+  "harness": {
+    "name": "bench",
+    "runtime": "opencode-cli",
+    "version": "0.1.0"
+  },
+  "notes": "4 models, 1 task(s), 4 runs. Enforced gates: G1, G2, G3, G5, G7. G4 egress sealing and G6 determinism are not yet enforced.",
+  "schema_version": "1.0.0",
+  "totals": {
+    "runs": 4,
+    "valid": 2,
+    "gate_failures": 2
+  }
+}

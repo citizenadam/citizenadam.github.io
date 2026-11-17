@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-11-17T22:03:51.208468911Z",
+  "models": [
+    {
+      "color": "#d6f24b",
+      "id": "opencode-go/deepseek-v4.1-flash",
+      "label": "deepseek-v4.1-flash",
+      "provider": "opencode-go"
+    },
+    {
+      "color": "#7fd1c0",
+      "id": "opencode-go/glm-5.3-flash",
+      "label": "glm-5.3-flash",
+      "provider": "opencode-go"
+    },
+    {
+      "color": "#8fb8ff",
+      "id": "opencode-go/gpt-5.6-luna",
+      "label": "gpt-5.6-luna",
+      "provider": "opencode-go"
+    },
+    {
+      "color": "#c9a0ff",
+      "id": "opencode-go/kimi-k3",
+      "label": "kimi-k3",
+      "provider": "opencode-go"
+    }
+  ],
+  "schema_version": "1.0.0"
+}

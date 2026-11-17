@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-11-17T22:03:51.208468911Z",
+  "totals": {
+    "runs": 4,
+    "valid": 2,
+    "gate_failures": 2
+  },
+  "by_model": [
+    {
+      "model": "deepseek-v4.1-flash",
+      "provider": "opencode-go",
+      "runs": 1,
+      "valid": 0,
+      "completion": 0,
+      "all_reps_valid": false,
+      "cost_total_usd": 0.013511874,
+      "cost_per_valid_usd": null,
+      "median_wall_ms": 185772,
+      "median_input_tokens": 63927,
+      "gate_failures": {
+        "G3_coverage_receipt": 1
+      }
+    },
+    {
+      "model": "glm-5.3-flash",
+      "provider": "opencode-go",
+      "runs": 1,
+      "valid": 0,
+      "completion": 0,
+      "all_reps_valid": false,
+      "cost_total_usd": 0.010434939999999998,
+      "cost_per_valid_usd": null,
+      "median_wall_ms": 67570,
+      "median_input_tokens": 50316,
+      "gate_failures": {
+        "G5_provenance": 1
+      }
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "provider": "opencode-go",
+      "runs": 1,
+      "valid": 1,
+      "completion": 1,
+      "all_reps_valid": true,
+      "cost_total_usd": 0.02078146,
+      "cost_per_valid_usd": 0.02078146,
+      "median_wall_ms": 106218,
+      "median_input_tokens": 24,
+      "gate_failures": {}
+    },
+    {
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "runs": 1,
+      "valid": 1,
+      "completion": 1,
+      "all_reps_valid": true,
+      "cost_total_usd": 0.2396382,
+      "cost_per_valid_usd": 0.2396382,
+      "median_wall_ms": 112125,
+      "median_input_tokens": 53082,
+      "gate_failures": {}
+    }
+  ],
+  "by_task": [
+    {
+      "task": "go-repair",
+      "runs": 4,
+      "valid": 2,
+      "completion": 0.5
+    }
+  ],
+  "matrix": [
+    {
+      "task": "go-repair",
+      "model": "deepseek-v4.1-flash",
+      "runs": 1,
+      "valid": 0,
+      "completion": 0,
+      "cost_per_valid_usd": null,
+      "median_wall_ms": 185772
+    },
+    {
+      "task": "go-repair",
+      "model": "glm-5.3-flash",
+      "runs": 1,
+      "valid": 0,
+      "completion": 0,
+      "cost_per_valid_usd": null,
+      "median_wall_ms": 67570
+    },
+    {
+      "task": "go-repair",
+      "model": "gpt-5.6-luna",
+      "runs": 1,
+      "valid": 1,
+      "completion": 1,
+      "cost_per_valid_usd": 0.02078146,
+      "median_wall_ms": 106218
+    },
+    {
+      "task": "go-repair",
+      "model": "kimi-k3",
+      "runs": 1,
+      "valid": 1,
+      "completion": 1,
+      "cost_per_valid_usd": 0.2396382,
+      "median_wall_ms": 112125
+    }
+  ]
+}

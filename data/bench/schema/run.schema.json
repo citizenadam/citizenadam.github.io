@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://citizenadam.github.io/data/bench/schema/run.schema.json",
+  "title": "Bench run",
+  "type": "object",
+  "required": ["run_id", "task", "model", "valid", "gates", "tokens", "cost_usd", "wall_ms"],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": { "type": "string", "description": "task.model.rep" },
+    "task": { "type": "string" },
+    "model": { "type": "string", "description": "panel label, not a version" },
+    "provider": { "type": "string" },
+    "rep": { "type": "integer", "minimum": 1 },
+    "started_at": { "type": "string", "format": "date-time" },
+    "wall_ms": { "type": "integer", "minimum": 0 },
+    "valid": { "type": "boolean", "description": "true only if every recorded gate passed" },
+    "gates": {
+      "type": "object",
+      "additionalProperties": { "type": "boolean" },
+      "description": "Only gates that actually ran appear here."
+    },
+    "tokens": {
+      "type": "object",
+      "required": ["input", "output"],
+      "properties": {
+        "input": { "type": "integer", "minimum": 0 },
+        "output": { "type": "integer", "minimum": 0 },
+        "reasoning": { "type": "integer", "minimum": 0 },
+        "cache_read": { "type": "integer", "minimum": 0 },
+        "cache_write": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "cost_usd": { "type": "number", "minimum": 0, "description": "list price of tokens consumed" },
+    "steps": { "type": "integer", "minimum": 0 },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "oracle_pass": { "type": "boolean" },
+        "vet": { "type": "boolean" },
+        "tests_passed": { "type": "integer" },
+        "tests_failed": { "type": "integer" },
+        "failed_tests": { "type": "array", "items": { "type": "string" } },
+        "oracle_ms": { "type": "integer" },
+        "input_seal": { "type": "string", "description": "sha256 of the fixture manifest" }
+      }
+    },
+    "session_id": { "type": "string" },
+    "error": { "type": "string" },
+    "harness": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "runtime": { "type": "string" }
+      }
+    }
+  }
+}

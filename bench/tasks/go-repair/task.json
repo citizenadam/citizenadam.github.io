@@ -1,0 +1,29 @@
+{
+  "id": "go-repair",
+  "title": "Fix a concurrent job queue",
+  "version": "1.0.0",
+  "lang": "go",
+  "workspace": "workspace",
+  "prompt": "You are working in a Go repository in the current directory. Read README.md: it states the contract this package must satisfy. The visible tests cover only part of that contract.\n\nFix queue.go and worker.go so all four numbered rules hold.\n\nConstraints: do not edit any _test.go file; standard library only; keep the exported API unchanged.\n\nRun `go test ./...` and `go test -race ./...`. When both pass, stop. Do not add files, do not run external linters, do not refactor beyond the fix.",
+  "contract": [
+    "Every job added before Close is processed exactly once.",
+    "Add, Len, Drain and Close are safe to call concurrently.",
+    "Start(ctx, n) must not process anything when ctx is already cancelled, and must leave no goroutine running after Wait.",
+    "Processed() returns the number of jobs handled and is race-free."
+  ],
+  "limits": {
+    "wall_seconds": 480,
+    "max_steps": 80
+  },
+  "oracle": {
+    "kind": "go-test",
+    "hidden_dir": "hidden",
+    "cmd": "go vet ./... && go test -race -count=1 ./...",
+    "keep_agent_tests": false,
+    "timeout_seconds": 300
+  },
+  "gates": {
+    "G6_determinism": false
+  },
+  "receipt_test": "TestAllJobsProcessed"
+}

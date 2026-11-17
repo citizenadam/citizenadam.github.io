@@ -1,108 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-    <link rel="icon" href="./assets/images/1311.png" />
-		<title>Adam Projects</title>
-    <meta name="description" content="Portfolio Maybe.">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+<meta charset="utf-8">
+<title>Adam Langmeyer — enterprise IT, production AI, and a benchmark that checks its own work</title>
+<meta name="description" content="Fifteen years running enterprise IT at five nines, now building production AI systems in Go. Includes a live agent benchmark with mechanical completion gates, cost per valid pass, and wall-clock per task.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0b0c">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://citizenadam.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Adam Langmeyer — enterprise IT, production AI">
+<meta property="og:description" content="A benchmark with mechanical completion gates: same task, same sandbox, same hidden tests. Cost and time rank only among valid runs.">
+<meta property="og:url" content="https://citizenadam.github.io/">
+<link rel="stylesheet" href="/css/site.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Adam Langmeyer",
+  "url": "https://citizenadam.github.io/",
+  "email": "mailto:redacted@example.invalid",
+  "jobTitle": "IT leader and AI systems engineer",
+  "address": { "@type": "PostalAddress", "addressLocality": "Palo Alto", "addressRegion": "CA", "addressCountry": "US" },
+  "sameAs": ["https://github.com/citizenadam"],
+  "knowsAbout": ["Go", "Kubernetes", "Terraform", "LLM systems", "SRE", "IT strategy", "PostgreSQL", "TimescaleDB"]
+}
+</script>
+</head>
+<body>
 
-		<link rel="stylesheet" href="./css/layout.css">
-    <link rel="stylesheet" href="./css/typography.css">
-    <link rel="stylesheet" href="./css/utilities.css">
+<a class="skip" href="#main">Skip to content</a>
 
-		<script defer src="./js/script.js"></script>
-	</head>
-	<body>
-    <!-- NAVBAR -->
-    <div class="navbar">
-      <a class="nav-title-link" href="./index.html">
-        <span class="nav-title">Adam Bio Page</span>
-        <a class="button" href="mailto:redacted@example.invalid">
-          <span class="button-text">Contact Me</span>
-        </a>
-      </a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="mark" href="/">AL<span class="mark-dot">.</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#bench">Bench</a>
+      <a href="#method">Method</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+      <a href="/resume.md" class="nav-ext">Résumé</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero wrap">
+  <p class="kicker"><span class="kicker-rule" aria-hidden="true"></span>Palo Alto, CA · open to remote</p>
+  <h1>Adam Langmeyer</h1>
+  <p class="lede">Ran enterprise IT for a 15,000-property portfolio at five nines. Went back to building: Go services, Kubernetes, Terraform, LLM systems in production.</p>
+  <p class="lede lede-2">This page runs an evaluation harness I wrote. Every number in the bench below came out of it.</p>
+
+  <dl class="stats">
+    <div><dt>Uptime owned</dt><dd>99.999<span>%</span></dd></div>
+    <div><dt>Properties served</dt><dd>15,000<span>+</span></dd></div>
+    <div><dt>Direct reports</dt><dd>20</dd></div>
+    <div><dt>Run-rate cut</dt><dd><span>$</span>199K<span>/yr</span></dd></div>
+  </dl>
+</section>
+
+<section class="band" id="bench">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">01 — bench</p>
+      <h2>Same task. Same harness. Held-out tests.</h2>
+      <p class="sec-intro">One agent task, several models, one harness. A run counts only when every gate passes. Cost and wall-clock rank <em>only among valid runs</em>, because a fast wrong answer is not a cheap answer.</p>
+      <p class="bench-meta" id="bench-meta">Loading run data…</p>
+    </header>
+
+    <div class="atlas" id="atlas">
+      <div class="atlas-stage">
+        <canvas id="atlas-canvas" width="880" height="520" role="img" aria-label="Three-dimensional scatter plot of benchmark runs by cost, wall-clock time, and validity"></canvas>
+        <div class="atlas-tip" id="atlas-tip" hidden></div>
+        <p class="atlas-empty" id="atlas-empty" hidden>No runs recorded yet.</p>
+      </div>
+      <aside class="atlas-side">
+        <div class="atlas-legend" id="atlas-legend"></div>
+        <div class="atlas-axis-note">
+          <p><b>x</b> cost, list price of tokens consumed</p>
+          <p><b>y</b> wall-clock, model call to final edit</p>
+          <p><b>z</b> validity, every gate green</p>
+        </div>
+        <p class="atlas-hint">Drag to orbit. Scroll to zoom. Click a point.</p>
+      </aside>
     </div>
 
-    <!-- MAIN PAGE CONTENT -->
-    <div id="main-content">
+    <div class="findings" id="findings"></div>
 
-      <!-- PORTFOLIO HEADER -->
-      <div id="portfolio-header">
-        <div id="portfolio-header-image-container">
-          <img src="./assets/images/1311.png" class="portfolio-header-image">
-          <a class="no-underline" target="_blank" href="https://opensea.io/assets/0xe0be388ab81c47b0f098d2030a1c9ef190691a8a/1311">
-            <span class="image-caption">Adam Langmeyer</span>
-          </a>
-        </div>
-        <div id="portfolio-header-text-container">
-            <div class="header-text">
-              <span class="main-title">I'm Adam</span>
-              <div class="body-text">I’m a freelance SRE and developer who aims to help businesses remove the frustrations of development friction.</div>
-            </div>
-            <a class="button" id="my-work-link">
-              <span class="button-text">Projects.</span> 
-              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
-            </a>
-        </div>
+    <details class="table-wrap">
+      <summary>Run table</summary>
+      <table class="runs" id="runs-table">
+        <thead>
+          <tr><th>run</th><th>model</th><th>task</th><th>valid</th><th>gates failed</th><th>in</th><th>out</th><th>cost</th><th>wall</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </details>
+  </div>
+</section>
+
+<section class="band band-alt" id="method">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">02 — method</p>
+      <h2>Completion is mechanical, not a vibe</h2>
+      <p class="sec-intro">Human votes say whether an artifact is <em>good</em>. They cannot say whether it is <em>done</em>. Every gate below is a program you can read, run, and disagree with.</p>
+    </header>
+
+    <table class="gates">
+      <thead>
+        <tr><th>Gate</th><th>What it checks</th><th>Cheat it kills</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>G1</code> input seal</td><td>SHA-256 manifest of the fixture is captured before the run; the oracle re-reads the original, not the agent's copy.</td><td>Deleting or rewriting the source data.</td></tr>
+        <tr><td><code>G2</code> held-out oracle</td><td>Tests and expected answers are not in the agent's workspace. They run after the agent stops.</td><td>Editing the tests, hardcoding the visible expectations.</td></tr>
+        <tr><td><code>G3</code> coverage receipt</td><td>The deliverable must attest how many rows it processed. The oracle compares that count against ground truth.</td><td>Sampling a tenth of the data and calling it done.</td></tr>
+        <tr><td><code>G5</code> provenance</td><td>Test files byte-identical after the run. No build tags, no skips. The diff may not touch the oracle.</td><td>Disabling the check instead of fixing the code.</td></tr>
+        <tr><td><code>G7</code> leak scan</td><td>Output is scanned against fixture answer literals.</td><td>Copying the answer key into the report.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="method-note-line">G4 (network egress inside the agent sandbox) and G6 (two-pass determinism) are specified and not yet enforced. Every run record lists exactly the gates that actually ran, so a missing gate is visible rather than assumed.</p>
+
+    <div class="method-notes">
+      <div>
+        <h3>What counts as cheating is a written contract</h3>
+        <p>Dropping rows to go faster fails <code>G3</code>. Adding an index to a slow query passes, because the contract is about the result, not the method. The task file states that boundary before the model sees anything.</p>
       </div>
-      <div id="about-section">
-        <span class="subheader-text">Info / About Me</span>
-        <div class="about-section-content">
-          <div class="body-text">I am looking to work in GoLang AIOps</div>
-          <div class="body-text">Useful Projects as available below.</div>
-        </div>
+      <div>
+        <h3>Reported separately, never blended</h3>
+        <p>Completion rate, cost per valid pass, median wall-clock, and gate-failure rate are four numbers. There is no composite score, because a composite score is where gaming hides.</p>
       </div>
-
-      <!-- PROJECTS / MY WORK SECTION -->
-      <div id="my-work-section">
-        <span class="subheader-text">Projects.</span>
-
-        <div class="projects-container">
-          <div class="project-card">
-            <img src="./assets/images/goperhdatapile.jpg" class="project-image">
-            <div class="project-card-text-container">
-              <div class="subheader-text project-title">Golang LLM Data Set</div>
-              <div class="body-text project-card-text">Fine Tune Go Code 1.18+</div>
-            </div>
-            <a class="button" href="https://github.com/citizenadam/gotraindata">
-              <span class="button-text">DataSet</span>
-              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
-            </a>
-          </div>
-          <div class="project-card">
-            <img src="./assets/images/floorthumbs.jpg" class="project-image">
-            <div class="project-card-text-container">
-              <div class="subheader-text project-title">Linkedin Endorser</div>
-              <div class="body-text project-card-text">A semi automatic way to endorse a network connection</div>
-            </div>
-            <a class="button" href="https://github.com/citizenadam/liendorsejsconsole">
-              <span class="button-text">Code Repo</span>
-              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
-            </a>
-          </div>
-          <div class="project-card">
-            <img src="./assets/images/dog3.jpg" class="project-image">
-            <div class="project-card-text-container">
-              <div class="subheader-text project-title">Pending 3</div>
-              <div class="body-text project-card-text">Pending 3</div>
-            </div>
-            <a class="button" href="./project-pages/project-template.html">
-              <span class="button-text">Read More</span>
-              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
-            </a>
-          </div>
-        </div>
+      <div>
+        <h3>Votes are a different axis</h3>
+        <p>Blind pairwise votes answer whether a passing artifact is usable. They never rescue a failing run and never move the completion number.</p>
       </div>
     </div>
 
-    <!-- FOOTER -->
-    <div id="footer">
+    <p class="method-link"><a href="/bench/README.md">harness source</a> <a href="/data/bench/manifest.json">manifest.json</a> <a href="/data/bench/runs.jsonl">runs.jsonl</a> <a href="/data/bench/tasks.json">tasks.json</a> <a href="/llms.txt">llms.txt</a></p>
+  </div>
+</section>
 
-      <a class="icon-link" href="mailto:redacted@example.invalid">
-        <image src="./assets/icons/mail.svg" class="footer-icon"/>
-      </a>
+<section class="band" id="work">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">03 — work</p>
+      <h2>Three things that shipped and stayed up</h2>
+    </header>
+
+    <div class="work">
+      <article class="job">
+        <div class="job-meta"><span>2018 — 2024</span><span>Director of IT</span></div>
+        <h3>US Home Rentals</h3>
+        <p>Owned enterprise IT end to end for a national portfolio: roadmap, ~$2.5M annual budget, 20 direct reports, availability for systems carrying ~$18M/month in flow.</p>
+        <ul>
+          <li>70 TB across three engines — MySQL on RDS, PostgreSQL, and 50 TB of MSSQL partitioned behind Dynamics — with read replicas serving 100K+ users at 99.999%.</li>
+          <li>~$199K/yr out of run-rate, including ~$144K in telecom and ~$55K in Google Workspace, without dropping service levels.</li>
+          <li>Day-one COVID merge into 100% Azure cloud-native; handled the contract migrations personally. 95% on-time, on-budget delivery across 60–100 projects.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-meta"><span>2013 — 2018</span><span>IT Manager, ERP PM</span></div>
+        <h3>Vision Property Management</h3>
+        <p>Consolidated Peachtree, QuickBooks, SAP, and manual spreadsheets into Microsoft Dynamics, then built the property-management workflow as a cloud ERP on AWS.</p>
+        <ul>
+          <li>~20K customer accounts at peak, plus 187 investment companies and three REIT/hedge-fund accounts.</li>
+          <li>Shipped four owned products: core PM (<code>vbase</code>), contractor bidding (<code>vops</code>, 1M+ contracts completed), phone-integrated CRM, and an investor data room with cross-investor confidentiality.</li>
+          <li>Moved 250 people through an office purchase with zero-day business outage.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-meta"><span>2025 — now</span><span>Principal</span></div>
+        <h3>Vector Point Capital</h3>
+        <p>Production LLM and agentic systems for enterprise clients, plus the data plane underneath a live options-trading operation.</p>
+        <ul>
+          <li>Distributed option-chain capture in Go: concurrent streams, Parquet buffer that survives a database outage, after-hours backfill. 99% gap-free seconds, ~1 TB/year per chain after columnar compression.</li>
+          <li>News sentiment service: FinBERT on CPU through ONNX, with a weighting layer built after finding VADER scores roughly 80% positive on financial text.</li>
+          <li>Kubernetes across managed EKS, managed OCI, and self-hosted Talos on bare metal; Terraform for full environments, Flux reconciling drift.</li>
+        </ul>
+      </article>
     </div>
+  </div>
+</section>
 
-	</body>
+<section class="band band-alt" id="about">
+  <div class="wrap about">
+    <header class="sec-head">
+      <p class="sec-num">04 — about</p>
+      <h2>What I am actually for</h2>
+    </header>
+    <div class="about-body">
+      <p>Organizations get stuck between two people: the one who owns the budget and the one who can debug production at 3am. I have been both, in the same week, for a decade. That is the job I am looking for — own the system, then go fix it.</p>
+      <p>Daily tools: Go, TypeScript and React, Python, PostgreSQL and TimescaleDB, Kubernetes, Terraform, Flux, Prometheus and Grafana, and whichever model is actually cheapest for the task in front of me.</p>
+      <p class="certs">AWS Solutions Architect – Associate · Certified Kubernetes Administrator · ITIL 4 Foundation</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" id="contact">
+  <div class="wrap foot-in">
+    <div>
+      <p class="foot-h">Get in touch</p>
+      <p class="foot-links">
+        <a href="mailto:redacted@example.invalid">redacted@example.invalid</a>
+        <a href="https://github.com/citizenadam" rel="me">github.com/citizenadam</a>
+        <a href="/resume.md">résumé, plain text</a>
+      </p>
+    </div>
+    <p class="foot-meta">Static, no analytics, no cookies. Data: <a href="/data/bench/manifest.json">JSON</a>.</p>
+  </div>
+</footer>
+
+<script src="/js/atlas.js" defer></script>
+<script src="/js/site.js" defer></script>
+</body>
 </html>

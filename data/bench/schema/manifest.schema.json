@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://citizenadam.github.io/data/bench/schema/manifest.schema.json",
+  "title": "Bench manifest",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "files"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "harness": { "type": "object" },
+    "totals": {
+      "type": "object",
+      "properties": {
+        "runs": { "type": "integer" },
+        "valid": { "type": "integer" },
+        "gate_failures": { "type": "integer" }
+      }
+    },
+    "files": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" }
+  }
+}

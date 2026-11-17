@@ -1,0 +1,49 @@
+package batchd
+
+import "testing"
+
+// TestDrainAllSizes walks every queue size that matters, including the two
+// edge cases an off-by-one hides behind: zero and one.
+func TestDrainAllSizes(t *testing.T) {
+	for n := 0; n <= 200; n++ {
+		q := NewQueue()
+		for i := 0; i < n; i++ {
+			q.Add(Job{ID: i})
+		}
+		got := q.Drain()
+		if len(got) != n {
+			t.Fatalf("n=%d: Drain() returned %d", n, len(got))
+		}
+		for i, j := range got {
+			if j.ID != i {
+				t.Fatalf("n=%d: job %d has ID %d, order broken or dropped", n, i, j.ID)
+			}
+		}
+		if q.Len() != 0 {
+			t.Fatalf("n=%d: Len() after Drain = %d", n, q.Len())
+		}
+	}
+}
+
+// TestConcurrentUse is here for the race detector, not for the assertion.
+func TestConcurrentUse(t *testing.T) {
+	q := NewQueue()
+	done := make(chan struct{})
+	for w := 0; w < 8; w++ {
+		go func(base int) {
+			defer func() { done <- struct{}{} }()
+			for i := 0; i < 500; i++ {
+				q.Add(Job{ID: base + i})
+				_ = q.Len()
+			}
+		}(w * 1000)
+	}
+	for i := 0; i < 8; i++ {
+		<-done
+	}
+	q.Close()
+	_ = q.Closed()
+	if q.Len() == 0 {
+		t.Fatal("queue is empty after 4000 adds")
+	}
+}

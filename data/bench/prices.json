@@ -1,0 +1,13 @@
+{
+  "$comment": "List prices used to price tokens, USD per million. The subscription gateway bills zero per token, so the harness prices the tokens itself against this table. Source: models.dev provider opencode-go, captured 2026-11-17.",
+  "source": "https://models.dev/api.json#opencode-go",
+  "captured_at": "2026-11-17",
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "models": {
+    "opencode-go/deepseek-v4.1-flash": { "input": 0.15, "output": 0.6,  "cache_read": 0.003, "cache_write": 0 },
+    "opencode-go/glm-5.3-flash":       { "input": 0.15, "output": 0.5,  "cache_read": 0.03,  "cache_write": 0 },
+    "opencode-go/gpt-5.6-luna":        { "input": 0.2,  "output": 1.2,  "cache_read": 0.02,  "cache_write": 0.25 },
+    "opencode-go/kimi-k3":             { "input": 3,    "output": 15,   "cache_read": 0.3,   "cache_write": 3 }
+  }
+}

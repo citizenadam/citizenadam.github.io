@@ -1,0 +1,54 @@
+# Adam Langmeyer
+
+> IT leader and AI systems engineer. Fifteen years owning enterprise IT end to end
+> (20 direct reports, ~$2.5M budget, 99.999% uptime across 15,000+ properties), now
+> building production LLM and agentic systems in Go, Kubernetes, and Terraform.
+> This site also hosts an open agent benchmark with mechanical completion gates.
+
+## Identity
+
+- Name: Adam Langmeyer
+- Location: Palo Alto, CA, United States
+- Email: redacted@example.invalid
+- GitHub: https://github.com/citizenadam
+- Availability: open to remote or Bay Area hybrid
+- Work authorization: US citizen, no sponsorship required
+
+## Primary pages
+
+- [Index](https://citizenadam.github.io/): positioning, benchmark, method, work history
+- [Résumé](https://citizenadam.github.io/resume.md): plain-text CV, authoritative
+- [Bench manifest](https://citizenadam.github.io/data/bench/manifest.json): schema version, file list, counts
+- [Bench runs](https://citizenadam.github.io/data/bench/runs.jsonl): one JSON object per line
+- [Bench tasks](https://citizenadam.github.io/data/bench/tasks.json): task contracts, gates, limits
+- [Bench models](https://citizenadam.github.io/data/bench/models.json): model panel, provider, pinned price
+- [Bench summary](https://citizenadam.github.io/data/bench/summary.json): precomputed aggregates
+- [JSON Schema](https://citizenadam.github.io/data/bench/schema/run.schema.json): run record shape
+
+## How to read the benchmark
+
+A run is `valid` only when every enforced gate passes and the oracle passes.
+Enforced now: input seal (G1), held-out oracle (G2), coverage receipt (G3),
+provenance (G5), answer-leak scan (G7). Specified but not yet enforced:
+network egress sealing (G4), two-pass determinism (G6). Each run record lists
+only the gates that actually ran.
+
+Cost and wall-clock are compared only among valid runs. There is no composite
+score. `cost_usd` is the list price of the tokens the run consumed, not what
+this machine paid. Votes, where present, are a separate axis and never change
+`valid`.
+
+## Facts
+
+- 2018-2024, Director of IT, US Home Rentals: ~$2.5M budget, 20 direct reports,
+  15,000+ properties, 99.999% uptime, ~$199K/yr run-rate reduction.
+- 2013-2018, IT Manager and ERP program manager, Vision Property Management:
+  consolidated four accounting systems into Microsoft Dynamics, shipped an AWS
+  cloud ERP serving ~20K accounts.
+- 2025-present, Principal, Vector Point Capital: production LLM systems, Go
+  option-chain capture at 99% gap-free seconds, Kubernetes on EKS/OCI/Talos.
+- Certifications: AWS Solutions Architect - Associate, CKA, ITIL 4 Foundation.
+
+## Contact
+
+Email is fastest. No forms, no calendar links.

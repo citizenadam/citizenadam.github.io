@@ -1,0 +1,9 @@
+{
+  "$comment": "The panel. IDs are provider/model as opencode resolves them. opencode-go is the subscription gateway, so marginal spend is zero; prices are not stored here because cost comes from each message opencode already priced.",
+  "models": [
+    { "id": "opencode-go/deepseek-v4.1-flash", "label": "deepseek-v4.1-flash", "provider": "opencode-go", "color": "#d6f24b", "notes": "cheap tier" },
+    { "id": "opencode-go/glm-5.3-flash",       "label": "glm-5.3-flash",       "provider": "opencode-go", "color": "#7fd1c0", "notes": "cheap tier" },
+    { "id": "opencode-go/gpt-5.6-luna",        "label": "gpt-5.6-luna",        "provider": "opencode-go", "color": "#8fb8ff", "notes": "cheap frontier" },
+    { "id": "opencode-go/kimi-k3",             "label": "kimi-k3",             "provider": "opencode-go", "color": "#c9a0ff", "notes": "mid tier" }
+  ]
+}

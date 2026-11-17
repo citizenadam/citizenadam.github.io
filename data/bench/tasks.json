@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-11-17T22:03:51.208468911Z",
+  "schema_version": "1.0.0",
+  "tasks": [
+    {
+      "contract": [
+        "Every job added before Close is processed exactly once.",
+        "Add, Len, Drain and Close are safe to call concurrently.",
+        "Start(ctx, n) must not process anything when ctx is already cancelled, and must leave no goroutine running after Wait.",
+        "Processed() returns the number of jobs handled and is race-free."
+      ],
+      "gates_enforced": [
+        "G1_input_seal",
+        "G2_held_out_oracle",
+        "G3_coverage_receipt",
+        "G5_provenance",
+        "G7_no_answer_leak"
+      ],
+      "id": "go-repair",
+      "lang": "go",
+      "limits": {
+        "wall_seconds": 480,
+        "max_steps": 80
+      },
+      "oracle": "go vet ./... \u0026\u0026 go test -race -count=1 ./...",
+      "title": "Fix a concurrent job queue",
+      "version": "1.0.0"
+    }
+  ]
+}

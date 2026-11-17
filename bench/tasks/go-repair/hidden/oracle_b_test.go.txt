@@ -1,0 +1,82 @@
+package batchd
+
+import (
+	"context"
+	"runtime"
+	"testing"
+	"time"
+)
+
+// TestAllJobsProcessed is the coverage receipt: the sum the worker reports has
+// to match the number of jobs the fixture enqueued.
+func TestAllJobsProcessed(t *testing.T) {
+	const n = 1000
+	q := NewQueue()
+	for i := 0; i < n; i++ {
+		q.Add(Job{ID: i})
+	}
+	q.Close()
+
+	w := NewWorker(q)
+	w.Start(context.Background(), 8)
+	w.Wait()
+
+	if got := w.Processed(); got != n {
+		t.Fatalf("Processed() = %d, want %d (jobs lost)", got, n)
+	}
+	if q.Len() != 0 {
+		t.Fatalf("Len() = %d after workers finished", q.Len())
+	}
+}
+
+// TestCancelledContextBeforeStart: a cancelled context means no work runs,
+// whether the worker designs for "drain until empty" or "wait for Close".
+func TestCancelledContextBeforeStart(t *testing.T) {
+	q := NewQueue()
+	for i := 0; i < 5; i++ {
+		q.Add(Job{ID: i})
+	}
+	q.Close()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	w := NewWorker(q)
+	w.Start(ctx, 3)
+	w.Wait()
+
+	if got := w.Processed(); got != 0 {
+		t.Fatalf("Processed() = %d after a cancelled context, want 0", got)
+	}
+	if q.Len() != 5 {
+		t.Fatalf("Len() = %d, want the 5 jobs untouched", q.Len())
+	}
+}
+
+// TestNoGoroutineLeak: Wait has to mean the goroutines are gone.
+func TestNoGoroutineLeak(t *testing.T) {
+	base := runtime.NumGoroutine()
+
+	q := NewQueue()
+	for i := 0; i < 50; i++ {
+		q.Add(Job{ID: i})
+	}
+	q.Close()
+
+	w := NewWorker(q)
+	w.Start(context.Background(), 4)
+	w.Wait()
+
+	if got := w.Processed(); got != 50 {
+		t.Fatalf("Processed() = %d, want 50", got)
+	}
+
+	deadline := time.Now().Add(500 * time.Millisecond)
+	for time.Now().Before(deadline) {
+		if runtime.NumGoroutine() <= base+1 {
+			return
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	t.Fatalf("goroutines did not settle: base %d, now %d", base, runtime.NumGoroutine())
+}

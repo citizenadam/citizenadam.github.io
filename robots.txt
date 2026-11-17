@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Bench data is meant to be read by machines. Have at it.
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://citizenadam.github.io/sitemap.xml

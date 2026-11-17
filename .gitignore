@@ -1,0 +1,9 @@
+# generated fixtures, agent workspaces, and oracle answers never ship
+bench/work/
+bench/.home/
+bench/.state/
+bench/.conf/
+bench/bench
+*.log
+.DS_Store
+.cortexkit/
