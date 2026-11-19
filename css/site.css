@@ -402,3 +402,41 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
 }
 .contact-link:hover { color: var(--accent); }
 .contact-fallback { font-size: 13px; color: var(--ink-3); font-family: var(--mono); }
+
+/* ---------- outcomes ---------- */
+.outcomes {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+}
+.outcome { background: var(--bg-2); padding: clamp(20px, 2.6vw, 30px); }
+.outcome p.outcome-num {
+  font-family: var(--mono); font-size: clamp(1.9rem, 3.6vw, 2.7rem);
+  letter-spacing: -.04em; line-height: 1; color: var(--accent);
+  margin-bottom: 14px; font-variant-numeric: tabular-nums;
+}
+.outcome p.outcome-num span { font-size: .42em; color: var(--ink-3); letter-spacing: 0; }
+.outcome h3 { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 8px; color: var(--ink); }
+.outcome p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+
+.outcome-note { margin-top: 28px; display: grid; gap: 10px; max-width: 78ch; }
+.outcome-note p { color: var(--ink-2); font-size: 14px; line-height: 1.65; }
+.outcome-note b { color: var(--ink); font-weight: 600; }
+.outcome-note .certs { margin-top: 6px; }
+
+@media (max-width: 720px) {
+  .outcomes { grid-template-columns: 1fr; }
+}
+
+/* ---------- how the work gets done ---------- */
+.how { margin-top: 34px; border-top: 1px solid var(--line); padding-top: 26px; }
+.how-title {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-3); font-weight: 500; margin-bottom: 20px;
+}
+.how-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+.how-grid h4 { font-size: 14px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 8px; color: var(--ink); }
+.how-grid p { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; }
+
+@media (max-width: 860px) {
+  .how-grid { grid-template-columns: 1fr; gap: 20px; }
+}
