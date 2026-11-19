@@ -316,3 +316,89 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
   margin-top: 14px; font-family: var(--mono); font-size: 11.5px;
   color: var(--ink-3); letter-spacing: .01em;
 }
+
+/* ---------- verdict card ---------- */
+.judge-result {
+  margin-top: 26px; border: 1px solid var(--line);
+  border-left: 3px solid var(--ink-3); background: var(--panel); padding: 22px;
+}
+.judge-result.tone-yes { border-left-color: var(--accent); }
+.judge-result.tone-maybe { border-left-color: var(--accent-2); }
+.judge-result.tone-no { border-left-color: var(--bad); }
+.judge-result.tone-error { border-left-color: var(--bad); }
+
+.j-verdict { font-size: clamp(1.3rem, 2.6vw, 1.7rem); letter-spacing: -.02em; font-weight: 600; margin-bottom: 10px; }
+.tone-yes .j-verdict { color: var(--accent); }
+.tone-maybe .j-verdict { color: var(--accent-2); }
+.tone-no .j-verdict,
+.tone-error .j-verdict { color: var(--bad); }
+
+.j-reason { color: var(--ink-2); font-size: 14px; max-width: 70ch; }
+.j-bars { margin: 20px 0 8px; display: grid; gap: 8px; }
+.j-bar {
+  display: grid; grid-template-columns: 150px 1fr 52px; gap: 12px; align-items: center;
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+}
+.j-bar-track { height: 4px; background: var(--line); display: block; }
+.j-bar-fill { display: block; height: 100%; background: var(--accent-2); }
+.j-bar-value { text-align: right; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+.j-flags { list-style: none; margin: 14px 0 0; display: grid; gap: 6px; }
+.j-flags li { font-size: 12.5px; color: var(--ink-3); padding-left: 16px; position: relative; }
+.j-flags li::before { content: "—"; position: absolute; left: 0; }
+
+.j-cta { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 18px; }
+.j-cta-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 8px; }
+.j-cta-body { color: var(--ink-2); font-size: 14px; max-width: 62ch; margin-bottom: 14px; }
+.j-cta-button {
+  display: inline-block; border: 1px solid var(--accent); color: var(--accent);
+  padding: 9px 18px; font-size: 13px; font-weight: 600;
+}
+.j-cta-button:hover { background: var(--accent); color: #05060a; }
+.j-cta-line { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+.j-cta-line a { color: var(--accent); font-size: 14px; border-bottom: 1px solid var(--accent); }
+.j-meta { margin-top: 16px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+
+@media (max-width: 620px) {
+  .j-bar { grid-template-columns: 110px 1fr 44px; }
+}
+
+/* ---------- hire panel ---------- */
+.band-hire { padding-top: clamp(40px, 6vw, 72px); }
+
+.hire-panel { margin-top: 4px; }
+.hire-roles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.hire-loading { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+
+.hire-chip {
+  background: var(--panel); border: 1px solid var(--line-2); color: var(--ink-2);
+  font-family: var(--mono); font-size: 12px; padding: 8px 13px; cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.hire-chip:hover { border-color: var(--accent); color: var(--ink); }
+.hire-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #05060a; }
+
+.hire-result-wrap { min-height: 0; }
+.hire-placeholder {
+  font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+  border: 1px dashed var(--line-2); padding: 26px 18px; text-align: center;
+}
+.hire-placeholder a { color: var(--ink-2); border-bottom: 1px solid var(--line-2); }
+.hire-placeholder a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+.hire-panel .judge-result { margin-top: 0; }
+.j-prompt {
+  font-size: 12.5px; color: var(--ink-3); line-height: 1.6;
+  border-left: 2px solid var(--line-2); padding-left: 12px; margin-bottom: 16px;
+}
+
+.hire-meta { margin-top: 16px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+
+/* The address is assembled at click time, so this is a button, not a link. */
+.contact-link {
+  background: none; border: 0; padding: 0; margin: 0;
+  font: inherit; font-size: 14px; color: var(--ink-2);
+  cursor: pointer; text-align: left; line-height: inherit;
+}
+.contact-link:hover { color: var(--accent); }
+.contact-fallback { font-size: 13px; color: var(--ink-3); font-family: var(--mono); }

@@ -1,0 +1,301 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-11-19T23:41:29.342Z",
+  "model": "jev-latest",
+  "state_revision": "f42b4581d69268a9",
+  "price_usd_per_mtok": 0.042,
+  "tokens_used": 20106,
+  "cost_usd": 0.000844,
+  "roles": [
+    {
+      "label": "Director of IT",
+      "requirement": "Lead IT for a mid-size company: own the budget and the roadmap, manage a team of engineers and analysts, keep business systems and infrastructure available, and answer to executive leadership.",
+      "answers": {
+        "depth": 2.86,
+        "gap": 0.21,
+        "scale_gap": 0.02,
+        "management": 0.99
+      },
+      "verdict": "Direct evidence",
+      "tone": "yes",
+      "depth": 2.86,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0,
+        "2": 0.14,
+        "3": 0.86
+      },
+      "gap": 0.21,
+      "scale_gap": 0.02,
+      "management": 0.99,
+      "flags": []
+    },
+    {
+      "label": "Head of Platform",
+      "requirement": "Own the internal platform for a product engineering organisation: Kubernetes, CI/CD, observability, developer experience, and a small team of platform engineers.",
+      "answers": {
+        "depth": 2.37,
+        "gap": 0.57,
+        "scale_gap": 0.04,
+        "management": 0.85
+      },
+      "verdict": "Evidenced, with caveats",
+      "tone": "maybe",
+      "depth": 2.37,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.14,
+        "2": 0.35,
+        "3": 0.51
+      },
+      "gap": 0.57,
+      "scale_gap": 0.04,
+      "management": 0.85,
+      "flags": [
+        "part of the requirement is not clearly in the record"
+      ]
+    },
+    {
+      "label": "Site reliability",
+      "requirement": "Keep production systems available: on-call, incident response, SLOs, capacity planning, and automation of repetitive operations across Linux and Kubernetes.",
+      "answers": {
+        "depth": 2.27,
+        "gap": 0.8,
+        "scale_gap": 0.02,
+        "management": 0.07
+      },
+      "verdict": "Evidenced, but a named requirement is missing",
+      "tone": "maybe",
+      "depth": 2.27,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.16,
+        "2": 0.4,
+        "3": 0.44
+      },
+      "gap": 0.8,
+      "scale_gap": 0.02,
+      "management": 0.07,
+      "flags": []
+    },
+    {
+      "label": "Staff Go engineer",
+      "requirement": "Design and build backend services in Go: concurrency, APIs, data storage, performance profiling, and production debugging in a distributed system.",
+      "answers": {
+        "depth": 2.42,
+        "gap": 0.55,
+        "scale_gap": 0.02,
+        "management": 0.03
+      },
+      "verdict": "Evidenced, with caveats",
+      "tone": "maybe",
+      "depth": 2.42,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.03,
+        "2": 0.52,
+        "3": 0.45
+      },
+      "gap": 0.55,
+      "scale_gap": 0.02,
+      "management": 0.03,
+      "flags": [
+        "part of the requirement is not clearly in the record"
+      ]
+    },
+    {
+      "label": "AI / LLM engineer",
+      "requirement": "Build production LLM features: retrieval, prompt and evaluation harnesses, cost and latency control, and owning the feature in production alongside backend services.",
+      "answers": {
+        "depth": 1.75,
+        "gap": 0.72,
+        "scale_gap": 0.02,
+        "management": 0.04
+      },
+      "verdict": "Evidenced, but a named requirement is missing",
+      "tone": "maybe",
+      "depth": 1.75,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.35,
+        "2": 0.54,
+        "3": 0.11
+      },
+      "gap": 0.72,
+      "scale_gap": 0.02,
+      "management": 0.04,
+      "flags": []
+    },
+    {
+      "label": "Data platform lead",
+      "requirement": "Own a data platform built on Spark and dbt, with a warehouse, orchestration, and a team of analytics engineers reporting to the role.",
+      "answers": {
+        "depth": 0.95,
+        "gap": 0.98,
+        "scale_gap": 0.03,
+        "management": 0.97
+      },
+      "verdict": "Not in the record",
+      "tone": "no",
+      "depth": 0.95,
+      "depth_by_level": {
+        "0": 0.09,
+        "1": 0.88,
+        "2": 0.01,
+        "3": 0.02
+      },
+      "gap": 0.98,
+      "scale_gap": 0.03,
+      "management": 0.97,
+      "flags": []
+    },
+    {
+      "label": "Kubernetes migration",
+      "requirement": "Migrate a production estate onto Kubernetes across multiple cloud providers, keep availability during the move, and codify the result in Terraform.",
+      "answers": {
+        "depth": 2.14,
+        "gap": 0.13,
+        "scale_gap": 0.03,
+        "management": 0.02
+      },
+      "verdict": "Direct evidence",
+      "tone": "yes",
+      "depth": 2.14,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.2,
+        "2": 0.46,
+        "3": 0.34
+      },
+      "gap": 0.13,
+      "scale_gap": 0.03,
+      "management": 0.02,
+      "flags": [
+        "the evidence sits on a threshold, so a small change in the record would move this"
+      ]
+    },
+    {
+      "label": "Engineering manager",
+      "requirement": "Manage a team of 10 to 30 software engineers: hiring, performance, career development, and delivery of a quarterly roadmap.",
+      "answers": {
+        "depth": 2.08,
+        "gap": 0.4,
+        "scale_gap": 0.37,
+        "management": 0.99
+      },
+      "verdict": "Evidenced",
+      "tone": "yes",
+      "depth": 2.08,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.08,
+        "2": 0.76,
+        "3": 0.16
+      },
+      "gap": 0.4,
+      "scale_gap": 0.37,
+      "management": 0.99,
+      "flags": [
+        "the evidence sits on a threshold, so a small change in the record would move this",
+        "part of the requirement is not clearly in the record",
+        "the scale comparison is unsettled"
+      ]
+    },
+    {
+      "label": "iOS developer",
+      "requirement": "Design and ship an iOS application: Swift, App Store release, ongoing maintenance, and native UI work.",
+      "answers": {
+        "depth": 0.45,
+        "gap": 0.99,
+        "scale_gap": 0.02,
+        "management": 0.04
+      },
+      "verdict": "Not in the record",
+      "tone": "no",
+      "depth": 0.45,
+      "depth_by_level": {
+        "0": 0.56,
+        "1": 0.44,
+        "2": 0,
+        "3": 0
+      },
+      "gap": 0.99,
+      "scale_gap": 0.02,
+      "management": 0.04,
+      "flags": []
+    },
+    {
+      "label": "Security engineer",
+      "requirement": "Own application and cloud security: threat modelling, identity and access, vulnerability management, and incident response.",
+      "answers": {
+        "depth": 0.99,
+        "gap": 0.9,
+        "scale_gap": 0.01,
+        "management": 0.07
+      },
+      "verdict": "Not in the record",
+      "tone": "no",
+      "depth": 0.99,
+      "depth_by_level": {
+        "0": 0.07,
+        "1": 0.89,
+        "2": 0.02,
+        "3": 0.02
+      },
+      "gap": 0.9,
+      "scale_gap": 0.01,
+      "management": 0.07,
+      "flags": [
+        "the evidence sits on a threshold, so a small change in the record would move this"
+      ]
+    },
+    {
+      "label": "Cloud consultant",
+      "requirement": "Advise clients on cloud architecture and migration, usually Azure or AWS, and deliver working infrastructure as code with cost discipline.",
+      "answers": {
+        "depth": 2.86,
+        "gap": 0.09,
+        "scale_gap": 0.02,
+        "management": 0.05
+      },
+      "verdict": "Direct evidence",
+      "tone": "yes",
+      "depth": 2.86,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0,
+        "2": 0.13,
+        "3": 0.87
+      },
+      "gap": 0.09,
+      "scale_gap": 0.02,
+      "management": 0.05,
+      "flags": []
+    },
+    {
+      "label": "CTO, seed stage",
+      "requirement": "Be the technical founder for a seed-stage company: set architecture, hire the first engineers, write code daily, and speak to investors.",
+      "answers": {
+        "depth": 1.72,
+        "gap": 0.67,
+        "scale_gap": 0.02,
+        "management": 0.82
+      },
+      "verdict": "Evidenced, with caveats",
+      "tone": "maybe",
+      "depth": 1.72,
+      "depth_by_level": {
+        "0": 0,
+        "1": 0.47,
+        "2": 0.34,
+        "3": 0.19
+      },
+      "gap": 0.67,
+      "scale_gap": 0.02,
+      "management": 0.82,
+      "flags": [
+        "part of the requirement is not clearly in the record"
+      ]
+    }
+  ]
+}

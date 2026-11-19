@@ -20,10 +20,9 @@
   "@type": "Person",
   "name": "Adam Langmeyer",
   "url": "https://citizenadam.github.io/",
-  "email": "mailto:redacted@example.invalid",
   "jobTitle": "IT leader and AI systems engineer",
   "address": { "@type": "PostalAddress", "addressLocality": "Palo Alto", "addressRegion": "CA", "addressCountry": "US" },
-  "sameAs": ["https://github.com/citizenadam"],
+  "sameAs": ["https://github.com/citizenadam", "https://www.linkedin.com/in/paul-langmeyer-true"],
   "knowsAbout": ["Go", "Kubernetes", "Terraform", "LLM systems", "SRE", "IT strategy", "PostgreSQL", "TimescaleDB"]
 }
 </script>
@@ -36,11 +35,12 @@
   <div class="wrap topbar-in">
     <a class="mark" href="/">AL<span class="mark-dot">.</span></a>
     <nav class="nav" aria-label="Sections">
+      <a href="#hire">Hire?</a>
       <a href="#bench">Bench</a>
       <a href="#method">Method</a>
       <a href="#work">Work</a>
       <a href="#contact">Contact</a>
-      <a href="/resume.md" class="nav-ext">Résumé</a>
+      <a href="https://www.linkedin.com/in/paul-langmeyer-true" class="nav-ext" rel="me" target="_blank">LinkedIn</a>
     </nav>
   </div>
 </header>
@@ -61,10 +61,31 @@
   </dl>
 </section>
 
+<section class="band band-hire" id="hire">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">01 — the question</p>
+      <h2>Should you hire me?</h2>
+      <p class="sec-intro">Pick the role you are filling. A decision model reads the recorded work history and answers with probabilities instead of adjectives — including a no, when the record does not support it. Every judgment is shown, and the thresholds are in the source.</p>
+    </header>
+
+    <div class="hire-panel">
+      <div class="hire-roles" id="hire-roles" role="group" aria-label="Roles">
+        <span class="hire-loading">Loading role set…</span>
+      </div>
+      <div class="hire-result-wrap">
+        <div id="hire-result" class="judge-result" hidden></div>
+        <p class="hire-placeholder" id="hire-placeholder">Choose a role above. Or <a href="/judge.html">paste an entire job description</a>.</p>
+      </div>
+      <p class="hire-meta" id="hire-meta"></p>
+    </div>
+  </div>
+</section>
+
 <section class="band" id="bench">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-num">01 — bench</p>
+      <p class="sec-num">02 — bench</p>
       <h2>Same task. Same harness. Held-out tests.</h2>
       <p class="sec-intro">One agent task, several models, one harness. A run counts only when every gate passes. Cost and wall-clock rank <em>only among valid runs</em>, because a fast wrong answer is not a cheap answer.</p>
       <p class="bench-meta" id="bench-meta">Loading run data…</p>
@@ -104,7 +125,7 @@
 <section class="band band-alt" id="method">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-num">02 — method</p>
+      <p class="sec-num">03 — method</p>
       <h2>Completion is mechanical, not a vibe</h2>
       <p class="sec-intro">Human votes say whether an artifact is <em>good</em>. They cannot say whether it is <em>done</em>. Every gate below is a program you can read, run, and disagree with.</p>
     </header>
@@ -146,7 +167,7 @@
 <section class="band" id="work">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-num">03 — work</p>
+      <p class="sec-num">04 — work</p>
       <h2>Three things that shipped and stayed up</h2>
     </header>
 
@@ -190,7 +211,7 @@
 <section class="band band-alt" id="about">
   <div class="wrap about">
     <header class="sec-head">
-      <p class="sec-num">04 — about</p>
+      <p class="sec-num">05 — about</p>
       <h2>What I am actually for</h2>
     </header>
     <div class="about-body">
@@ -208,15 +229,19 @@
     <div>
       <p class="foot-h">Get in touch</p>
       <p class="foot-links">
-        <a href="mailto:redacted@example.invalid">redacted@example.invalid</a>
+        <button type="button" class="contact-link" data-contact data-subject="Saw your page">Email</button>
+        <noscript><span class="contact-fallback">paullangmeyer [at] protonmail [dot] com</span></noscript>
         <a href="https://github.com/citizenadam" rel="me">github.com/citizenadam</a>
-        <a href="/resume.md">résumé, plain text</a>
+        <a href="https://www.linkedin.com/in/paul-langmeyer-true" rel="me" target="_blank">LinkedIn</a>
       </p>
     </div>
     <p class="foot-meta">Static, no analytics, no cookies. Data: <a href="/data/bench/manifest.json">JSON</a>.</p>
   </div>
 </footer>
 
+<script src="/js/contact.js" defer></script>
+<script src="/js/verdict.js" defer></script>
+<script src="/js/hire.js" defer></script>
 <script src="/js/atlas.js" defer></script>
 <script src="/js/site.js" defer></script>
 </body>

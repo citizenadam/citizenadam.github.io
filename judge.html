@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Should you hire Adam Langmeyer? — a judge that reads the record</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/judge.css">
+</head>
+<body class="judge-page">
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="mark" href="/">AL<span class="mark-dot">.</span></a>
+    <nav class="nav"><a href="/">Back to the site</a></nav>
+  </div>
+</header>
+
+<main class="wrap judge-main">
+  <p class="sec-num">Preview · not linked from the site yet</p>
+  <h1 class="judge-h1">Should you hire Adam Langmeyer?</h1>
+  <p class="judge-sub">Paste the role's requirements, or a whole job description. A TypeSafe Jev model checks them against the recorded work history and answers with probabilities instead of opinions. Every judgment it made is shown.</p>
+
+  <form id="judge-form" class="judge-form" data-endpoint="/api/ask">
+    <label class="judge-label" for="judge-input">Requirements or job description</label>
+    <textarea id="judge-input" rows="8" maxlength="4000"
+      placeholder="Paste the requirements. Example:&#10;&#10;Own the platform roadmap for a 200-person engineering org. Kubernetes at scale, Terraform, cost discipline, and a track record of hiring and growing SREs. Must have run a production AI feature."></textarea>
+    <div class="judge-actions">
+      <button id="judge-submit" type="submit">Judge this</button>
+      <span class="judge-caveat">Answers are probabilistic and limited to what the record states. Nothing is stored.</span>
+    </div>
+  </form>
+
+  <div class="judge-samples">
+    <span>Try one:</span>
+    <button type="button" data-judge-example="Run a Kubernetes migration across three clouds, own the Terraform, and keep a five nines service up while it happens.">Kubernetes migration</button>
+    <button type="button" data-judge-example="Lead IT for a company with more than 10,000 employees: own a multi-million dollar budget, manage managers, and answer to the board.">IT leadership at scale</button>
+    <button type="button" data-judge-example="Build a production LLM feature with retrieval, evaluation, and cost controls, and own it in production.">Production LLM feature</button>
+    <button type="button" data-judge-example="Design and ship an iOS application for our field technicians, including App Store release and ongoing maintenance.">iOS app development</button>
+  </div>
+
+  <div id="judge-result" class="judge-result" hidden></div>
+
+  <section class="judge-method">
+    <h2>How the answer is reached</h2>
+    <p>The model is asked four questions about the pasted text and the record: how directly the record shows this responsibility (0-3), whether the requirement names something the record never mentions, whether the stated scale is larger than anything in the record, and whether the role is about running people or money. The verdict is decided in code from those four numbers, and every threshold is visible in the source.</p>
+    <p>The record is a fixed file: three roles, the systems, the numbers, and a written list of what is <em>not</em> evidenced. Nothing about the visitor is stored, and no question text is kept after the request.</p>
+  </section>
+</main>
+
+<script src="/js/contact.js" defer></script>
+<script src="/js/verdict.js" defer></script>
+<script src="/js/judge.js" defer></script>
+</body>
+</html>

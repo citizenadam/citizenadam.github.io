@@ -9,7 +9,7 @@
 
 - Name: Adam Langmeyer
 - Location: Palo Alto, CA, United States
-- Email: redacted@example.invalid
+- Email: paullangmeyer [at] protonmail [dot] com (assembled by hand)
 - GitHub: https://github.com/citizenadam
 - Availability: open to remote or Bay Area hybrid
 - Work authorization: US citizen, no sponsorship required
@@ -17,7 +17,7 @@
 ## Primary pages
 
 - [Index](https://citizenadam.github.io/): positioning, benchmark, method, work history
-- [Résumé](https://citizenadam.github.io/resume.md): plain-text CV, authoritative
+- [LinkedIn](https://www.linkedin.com/in/paul-langmeyer-true): professional history, kept current
 - [Bench manifest](https://citizenadam.github.io/data/bench/manifest.json): schema version, file list, counts
 - [Bench runs](https://citizenadam.github.io/data/bench/runs.jsonl): one JSON object per line
 - [Bench tasks](https://citizenadam.github.io/data/bench/tasks.json): task contracts, gates, limits
