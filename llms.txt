@@ -1,9 +1,10 @@
 # Adam Langmeyer
 
-> IT leader and AI systems engineer. Fifteen years owning enterprise IT end to end
-> (20 direct reports, ~$2.5M budget, 99.999% uptime across 15,000+ properties), now
-> building production LLM and agentic systems in Go, Kubernetes, and Terraform.
-> This site also hosts an open agent benchmark with mechanical completion gates.
+> IT and platform leader. Fifteen years owning enterprise IT end to end (20 direct
+> reports, ~$2.5M budget, 99.999% uptime across 15,000+ properties, vendor and
+> outsourcing management, $199K/yr removed from run-rate). Current work: platform,
+> cloud economics, and AI systems in production. This site also hosts an open agent
+> benchmark with mechanical completion gates.
 
 ## Identity
 
