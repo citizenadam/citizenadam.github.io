@@ -9,7 +9,7 @@
 
 - Name: Adam Langmeyer
 - Location: Palo Alto, CA, United States
-- Email: paullangmeyer [at] protonmail [dot] com (assembled by hand)
+- Contact: the Email button on the site assembles the address in the browser; LinkedIn is in the footer.
 - GitHub: https://github.com/citizenadam
 - Availability: open to remote or Bay Area hybrid
 - Work authorization: US citizen, no sponsorship required
