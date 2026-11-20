@@ -9,3 +9,4 @@ bench/bench
 .cortexkit/
 
 node_modules/
+judge/.record.json

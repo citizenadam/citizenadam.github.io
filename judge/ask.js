@@ -4,7 +4,7 @@
 // The API key lives here and never reaches the browser. That is the whole
 // reason this file exists.
 
-import { STATE } from "./state.mjs";
+import { loadState } from "./state.mjs";
 import { QUESTIONS, MODEL, buildRequest, decide } from "./questions.mjs";
 import { fileToText } from "./extract.mjs";
 
@@ -122,7 +122,7 @@ export async function handle(request, env = {}) {
         "content-type": "application/json",
         authorization: `Bearer ${env.TYPESAFE_API_KEY}`
       },
-      body: JSON.stringify(buildRequest(requirement, STATE)),
+      body: JSON.stringify(buildRequest(requirement, loadState(env))),
       signal: AbortSignal.timeout(25000)
     });
   } catch (err) {
@@ -146,10 +146,10 @@ export async function handle(request, env = {}) {
       ...judged,
       model: data.model,
       usage: data.usage,
-      state_revision: await sha(JSON.stringify(STATE))
+      state_revision: await sha(JSON.stringify(loadState(env)))
     },
     200, origin, env
   );
 }
 
-export { STATE, QUESTIONS, MODEL };
+export { loadState, QUESTIONS, MODEL };

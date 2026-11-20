@@ -29,6 +29,7 @@ jobs:
       - name: Ask the model
         env:
           TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+          JUDGE_RECORD: ${{ secrets.JUDGE_RECORD }}
         run: node judge/precompute.mjs
 
       - name: Commit the answers

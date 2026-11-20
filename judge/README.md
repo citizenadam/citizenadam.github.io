@@ -9,15 +9,27 @@ There is no API call, no key in the browser, and no second provider.
 
 ## How an answer is produced
 
-1. `state.mjs` holds the record: three roles, the numbers, and a written list of
-   what is **not** evidenced.
+1. The record — three roles, the numbers, and a written list of what is **not**
+   evidenced — is a secret called `JUDGE_RECORD`, set on the Worker and on the
+   repository. It is not in this tree, so it can carry as much detail as the
+   judgement needs without any of it being published. `state.mjs` only loads it.
 2. `questions.mjs` holds four typed questions and the truth table that turns the
    answers into a verdict. The model supplies judgments; the decision is code.
 3. `roles.mjs` holds twelve common roles, each written as a requirement.
 4. `precompute.mjs` asks the model about all twelve and writes
    `data/judge/precomputed.json`.
 5. `.github/workflows/judge.yml` runs that on any change to this directory, with
-   `TYPESAFE_API_KEY` from repository secrets, and commits the result.
+   `TYPESAFE_API_KEY` and `JUDGE_RECORD` from repository secrets, and commits the
+   result.
+
+Set both secrets with:
+
+```sh
+gh secret set TYPESAFE_API_KEY      < ~/.config/opencode/jev.env     # value only
+gh secret set JUDGE_RECORD          < judge/.record.json
+wrangler secret put TYPESAFE_API_KEY
+wrangler secret put JUDGE_RECORD    < judge/.record.json
+```
 
 A visitor's click reads the committed file. The whole twelve-role set costs
 about $0.0008, once, and then nothing.

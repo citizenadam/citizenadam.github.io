@@ -6,7 +6,7 @@ import { writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { STATE } from "./state.mjs";
+import { loadState } from "./state.mjs";
 import { QUESTIONS, MODEL, decide } from "./questions.mjs";
 import { ROLES } from "./roles.mjs";
 
@@ -18,6 +18,7 @@ if (!KEY) {
   process.exit(1);
 }
 
+const STATE = loadState(process.env);
 const revision = createHash("sha256").update(JSON.stringify(STATE)).digest("hex").slice(0, 16);
 const judged = [];
 let tokens = 0;
