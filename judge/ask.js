@@ -97,7 +97,9 @@ export async function handle(request, env = {}) {
   }
 
   const ip = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "";
-  const gate = await limited(env, ip.split(",")[0].trim());
+  const addr = ip.split(",")[0].trim();
+  const gate = await limited(env, addr);
+  console.log(JSON.stringify({ gate: gate.ok, reason: gate.reason || null, addr }));
   if (!gate.ok) {
     return reply({ error: "rate", message: gate.reason }, gate.status || 429, origin, env);
   }
