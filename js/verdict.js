@@ -47,29 +47,68 @@
       '<a class="j-cta-button" href="' + mail + '">Talk it through</a></div>';
   }
 
+  function hasDoneThis(depth) {
+    if (depth >= 2.4) return { word: "Yes, directly", cls: "ok" };
+    if (depth >= 1.7) return { word: "Yes", cls: "ok" };
+    if (depth >= 1.1) return { word: "Partly, in adjacent work", cls: "mid" };
+    return { word: "No", cls: "no" };
+  }
+
+  function asksForNew(gap) {
+    if (gap >= 0.7) return { word: "Yes, something specific", cls: "no" };
+    if (gap >= 0.4) return { word: "A little", cls: "mid" };
+    return { word: "Nothing beyond the record", cls: "ok" };
+  }
+
+  function biggerThanBefore(scale) {
+    if (scale >= 0.7) return { word: "Yes, noticeably", cls: "mid" };
+    if (scale >= 0.4) return { word: "About the same", cls: "ok" };
+    return { word: "No", cls: "ok" };
+  }
+
+  function badge(tone) {
+    if (tone === "yes") return { text: "Yes", cls: "yes" };
+    if (tone === "no") return { text: "No", cls: "no" };
+    return { text: "Maybe", cls: "maybe" };
+  }
+
+  function row(label, value) {
+    return '<div class="v-fact"><dt>' + esc(label) + "</dt>" +
+      '<dd class="' + value.cls + '">' + esc(value.word) + "</dd></div>";
+  }
+
   function html(data, meta) {
-    var out = '<p class="j-verdict">' + esc(data.verdict) + "</p>";
+    var b = badge(data.tone);
+
+    var out = '<p class="v-badge v-badge-' + b.cls + '">' + esc(b.text) + "</p>";
+    out += '<p class="j-verdict">' + esc(data.verdict) + "</p>";
+
+    out += '<dl class="v-facts">';
+    out += row("Has done this work", hasDoneThis(data.depth));
+    out += row("Asks for something not on the record", asksForNew(data.gap));
+    out += row("Bigger than anything done before", biggerThanBefore(data.scale_gap));
+    out += "</dl>";
+
+    out += cta(data.tone);
+
+    // The raw numbers stay available, one click down, for anyone auditing it.
+    out += '<details class="v-math"><summary>The numbers behind this</summary>';
     out += '<p class="j-reason">Directness ' + data.depth.toFixed(2) + " of 3. " +
       "Outside the record " + data.gap.toFixed(2) + ". Scale beyond the record " +
       data.scale_gap.toFixed(2) + ".</p>";
-
     out += '<div class="j-bars">';
     out += bar("direct evidence", data.depth, 3);
     out += bar("outside the record", data.gap, 1);
     out += bar("scale beyond record", data.scale_gap, 1);
     out += "</div>";
-
     if (data.flags && data.flags.length) {
       out += '<ul class="j-flags">' + data.flags.map(function (f) {
         return "<li>" + esc(f) + "</li>";
       }).join("") + "</ul>";
     }
+    out += "</details>";
 
-    out += cta(data.tone);
-
-    if (meta) {
-      out += '<p class="j-meta">' + esc(meta) + "</p>";
-    }
+    if (meta) out += '<p class="j-meta">' + esc(meta) + "</p>";
     return out;
   }
 

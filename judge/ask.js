@@ -6,8 +6,9 @@
 
 import { STATE } from "./state.mjs";
 import { QUESTIONS, MODEL, buildRequest, decide } from "./questions.mjs";
+import { fileToText } from "./extract.mjs";
 
-const MAX_INPUT = 4000;
+const MAX_INPUT = 12000;
 const DEFAULT_ORIGIN = "https://citizenadam.github.io";
 
 const memory = new Map();
@@ -90,13 +91,23 @@ export async function handle(request, env = {}) {
     return reply({ error: "input", message: "Body must be JSON." }, 400, origin, env);
   }
 
-  const requirement = String(body.requirement || "").trim();
+  let requirement = String(body.requirement || "").trim();
+
+  // A pasted posting and an uploaded one take the same path from here.
+  if (requirement.length < 8 && body.file && body.file.data) {
+    try {
+      requirement = (await fileToText(body.file.name, body.file.data)).replace(/[ \t]+/g, " ").trim();
+    } catch (err) {
+      return reply({ error: "file", message: err.message || "That file could not be read." }, 400, origin, env);
+    }
+  }
+
   if (requirement.length < 8) {
-    return reply({ error: "input", message: "Paste the requirement or job description first." }, 400, origin, env);
+    return reply({ error: "input", message: "Paste the requirements or drop a PDF, DOCX or text file." }, 400, origin, env);
   }
   if (requirement.length > MAX_INPUT) {
     return reply(
-      { error: "input", message: `Keep it under ${MAX_INPUT} characters. Trim the posting to the requirements section.` },
+      { error: "input", message: `That is ${requirement.length} characters; the limit is ${MAX_INPUT}. Trim the posting to the requirements section.` },
       413, origin, env
     );
   }

@@ -66,17 +66,33 @@
     <header class="sec-head">
       <p class="sec-num">01 — the question</p>
       <h2>Should you hire me?</h2>
-      <p class="sec-intro">Pick the role you are filling. A decision model reads the recorded work history and answers with probabilities instead of adjectives — including a no, when the record does not support it. Every judgment is shown, and the thresholds are in the source.</p>
+      <p class="sec-intro">Pick the role you are filling. A decision model reads the recorded work history and answers yes, no or maybe — including a no, when the record does not support it. The reasons are listed in plain words, and the probabilities behind them are one click away.</p>
     </header>
 
     <div class="hire-panel">
-      <div class="hire-roles" id="hire-roles" role="group" aria-label="Roles">
+      <div class="hire-roles" id="hire-roles" role="group" aria-label="Common roles">
         <span class="hire-loading">Loading role set…</span>
       </div>
-      <div class="hire-result-wrap">
-        <div id="hire-result" class="judge-result" hidden></div>
-        <p class="hire-placeholder" id="hire-placeholder">Choose a role above to see what the record supports.</p>
-      </div>
+
+      <form class="hire-input" id="hire-form" data-endpoint="https://un5wftftjyqizbpem36uekzgne0tyblw.lambda-url.us-east-1.on.aws/">
+        <label class="hire-label" for="hire-text">Paste the requirements or the whole posting</label>
+        <textarea id="hire-text" rows="6" maxlength="12000"
+          placeholder="Paste a job description here, or drop the PDF or Word file below."></textarea>
+
+        <div class="hire-drop" id="hire-drop" tabindex="0" role="button"
+             aria-label="Upload a posting. Drop a PDF, Word or text file here, or press Enter to choose a file.">
+          <input type="file" id="hire-file" accept=".pdf,.docx,.txt,.md" hidden>
+          <p class="hire-drop-main">Drop a PDF, Word or text file here</p>
+          <p class="hire-drop-sub">or click to choose one · up to 4 MB</p>
+        </div>
+
+        <div class="hire-actions">
+          <button type="submit" id="hire-submit">Judge this posting</button>
+          <span class="hire-status" id="hire-status" role="status"></span>
+        </div>
+      </form>
+
+      <div id="hire-result" class="judge-result" hidden></div>
       <p class="hire-meta" id="hire-meta"></p>
     </div>
   </div>
