@@ -141,8 +141,9 @@
       });
 
       el("hire-meta").textContent =
-        "Twelve common roles judged in advance with " + data.model + " · total cost " +
-        window.Verdict.money(data.tokens_used) + ". A pasted or uploaded posting is judged live.";
+        "Judged live by " + data.model + " against record " + data.state_revision +
+        ". The twelve roles above were judged in advance, and all twelve cost " +
+        window.Verdict.money(data.tokens_used) + " in total.";
     } else {
       chips.innerHTML = '<span class="hire-loading">Role set unavailable; paste a posting below.</span>';
     }
