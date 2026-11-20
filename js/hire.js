@@ -1,35 +1,132 @@
-// The headline panel. Twelve roles, judged once at publish time by a decision
-// model, stored as a flat file. No request is made when a visitor clicks: no
-// server, no key, no third party in the path.
+// The headline panel. Two ways in: a role from the precomputed set, or a real
+// posting — pasted as text or dropped as a PDF/Word file and read on the server.
 (function () {
   "use strict";
 
   var CONFIG_URL = "/data/judge/precomputed.json";
+  var MAX_BYTES = 4 * 1024 * 1024;
+  var file = null;
 
   function el(id) { return document.getElementById(id); }
 
-  function show(role, meta) {
-    var out = el("hire-result");
-    var placeholder = el("hire-placeholder");
-    if (placeholder) placeholder.hidden = true;
+  function status(text) {
+    var node = el("hire-status");
+    if (node) node.textContent = text || "";
+  }
 
+  function showCard(html, tone) {
+    var out = el("hire-result");
     out.hidden = false;
-    out.className = window.Verdict.toneClass(role.tone);
-    out.innerHTML =
-      '<p class="j-prompt">' + window.Verdict.esc(role.requirement) + "</p>" +
-      window.Verdict.html(role, meta);
+    out.className = window.Verdict.toneClass(tone);
+    out.innerHTML = html;
     out.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+
+  function fail(message) {
+    showCard('<p class="j-verdict">No answer</p><p class="j-reason">' +
+      window.Verdict.esc(message) + "</p>", "no");
+  }
+
+  function toBase64(buf) {
+    var bytes = new Uint8Array(buf);
+    var out = "";
+    var chunk = 0x8000;
+    for (var i = 0; i < bytes.length; i += chunk) {
+      out += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    }
+    return btoa(out);
+  }
+
+  function describeFile() {
+    var drop = el("hire-drop");
+    if (!file) {
+      drop.classList.remove("has-file");
+      drop.querySelector(".hire-drop-main").textContent = "Drop a PDF, Word or text file here";
+      drop.querySelector(".hire-drop-sub").textContent = "or click to choose one · up to 4 MB";
+      return;
+    }
+    drop.classList.add("has-file");
+    drop.querySelector(".hire-drop-main").textContent = file.name;
+    drop.querySelector(".hire-drop-sub").textContent =
+      Math.round(file.size / 1024) + " KB · click to replace";
+  }
+
+  function acceptFile(f) {
+    if (!f) return;
+    if (f.size > MAX_BYTES) {
+      status("That file is larger than 4 MB. Trim the posting first.");
+      return;
+    }
+    file = f;
+    el("hire-text").value = "";
+    describeFile();
+    status("");
+  }
+
+  async function judgeRole(role, data) {
+    var meta = "judged " + data.generated_at.slice(0, 10) + " · " +
+      window.Verdict.money(data.tokens_used / data.roles.length) + " of tokens · " + data.model;
+    showCard('<p class="j-prompt">' + window.Verdict.esc(role.requirement) + "</p>" +
+      window.Verdict.html(role, meta), role.tone);
+  }
+
+  async function submit(event) {
+    event.preventDefault();
+    var button = el("hire-submit");
+    var text = el("hire-text").value.trim();
+    var endpoint = el("hire-form").dataset.endpoint;
+
+    if (!text && !file) {
+      status("Paste the requirements or drop a file first.");
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Judging…";
+    status(file && !text ? "Reading " + file.name + "…" : "Reading the posting…");
+
+    try {
+      var body;
+      if (text) {
+        body = { requirement: text };
+      } else {
+        body = { file: { name: file.name, data: toBase64(await file.arrayBuffer()) } };
+      }
+
+      var res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      var data = await res.json().catch(function () { return {}; });
+
+      if (!res.ok || data.error) {
+        fail(data.message || "The judge did not answer. Try again in a moment.");
+      } else {
+        var meta = data.model + " · " + window.Verdict.money(data.usage && data.usage.input_tokens) +
+          " of tokens · record " + data.state_revision;
+        showCard(window.Verdict.html(data, meta), data.tone);
+      }
+    } catch (err) {
+      fail("Could not reach the judge. " + (err && err.message ? err.message : ""));
+    } finally {
+      button.disabled = false;
+      button.textContent = "Judge this posting";
+      status("");
+    }
   }
 
   async function boot() {
     var chips = el("hire-roles");
     if (!chips) return;
 
+    var data = null;
     try {
       var res = await fetch(CONFIG_URL, { cache: "no-cache" });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      var data = await res.json();
+      if (res.ok) data = await res.json();
+    } catch (err) { /* the input still works without the precomputed set */ }
 
+    if (data) {
       chips.innerHTML = data.roles.map(function (r, i) {
         return '<button type="button" class="hire-chip" data-i="' + i + '">' +
           window.Verdict.esc(r.label) + "</button>";
@@ -39,21 +136,54 @@
         b.addEventListener("click", function () {
           chips.querySelectorAll(".hire-chip").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
           b.setAttribute("aria-pressed", "true");
-
-          var role = data.roles[Number(b.dataset.i)];
-          var meta = "judged " + data.generated_at.slice(0, 10) + " · " +
-            window.Verdict.money(data.tokens_used / data.roles.length) + " of tokens · " + data.model;
-          show(role, meta);
+          judgeRole(data.roles[Number(b.dataset.i)], data);
         });
       });
 
       el("hire-meta").textContent =
-        "Twelve roles judged in advance with " + data.model + " against record " +
-        data.state_revision + ". Total cost of judging all twelve: " +
-        window.Verdict.money(data.tokens_used) + ".";
-    } catch (err) {
-      el("hire-meta").textContent = "The role set is not published yet.";
+        "Twelve common roles judged in advance with " + data.model + " · total cost " +
+        window.Verdict.money(data.tokens_used) + ". A pasted or uploaded posting is judged live.";
+    } else {
+      chips.innerHTML = '<span class="hire-loading">Role set unavailable; paste a posting below.</span>';
     }
+
+    var form = el("hire-form");
+    form.addEventListener("submit", submit);
+
+    var drop = el("hire-drop");
+    var input = el("hire-file");
+
+    drop.addEventListener("click", function () { input.click(); });
+    drop.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+    });
+    input.addEventListener("change", function () { acceptFile(input.files[0]); });
+
+    ["dragenter", "dragover"].forEach(function (name) {
+      drop.addEventListener(name, function (e) {
+        e.preventDefault();
+        drop.classList.add("dragging");
+      });
+    });
+    ["dragleave", "drop"].forEach(function (name) {
+      drop.addEventListener(name, function (e) {
+        e.preventDefault();
+        drop.classList.remove("dragging");
+      });
+    });
+    drop.addEventListener("drop", function (e) {
+      var dropped = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      acceptFile(dropped);
+    });
+
+    // A posting dropped anywhere on the panel should land in the same place.
+    form.addEventListener("dragover", function (e) { e.preventDefault(); });
+    form.addEventListener("drop", function (e) {
+      if (e.target.closest && e.target.closest("#hire-drop")) return;
+      e.preventDefault();
+      var dropped = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      acceptFile(dropped);
+    });
   }
 
   if (document.readyState === "loading") {

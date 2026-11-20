@@ -1,0 +1,22 @@
+name = "hire-judge"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+# KV is optional. Without it the counters are per-isolate best effort.
+# With it, per-visitor and daily caps actually hold.
+# [[kv_namespaces]]
+# binding = "RATE"
+# id = "create-with: wrangler kv namespace create RATE"
+
+[vars]
+ALLOWED_ORIGINS = "https://citizenadam.github.io"
+IP_DAILY_CAP = "25"
+DAILY_CAP = "400"
+MIN_GAP_MS = "60000"
+
+# The key itself is a secret, never a var:
+#   wrangler secret put TYPESAFE_API_KEY
+
+[[kv_namespaces]]
+binding = "RATE"
+id = "d68a0f294e904fab86232fb2dfdbd471"

@@ -7,3 +7,5 @@ bench/bench
 *.log
 .DS_Store
 .cortexkit/
+
+node_modules/

@@ -1,0 +1,15 @@
+{
+  "name": "judge",
+  "version": "1.0.0",
+  "description": "The headline panel asks a question a recruiter actually has \u2014 should we hire this person for this role \u2014 and answers it from the recorded work history, with yes, no or maybe and the reasons in plain words.",
+  "main": "ask.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "module",
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "unpdf": "^2.2.1"
+  }
+}
