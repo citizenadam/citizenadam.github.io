@@ -27,6 +27,14 @@
       window.Verdict.esc(message) + "</p>", "no");
   }
 
+  // A throttle is not a failure. It gets its own card, in the same voice the
+  // rest of the page uses.
+  function throttled(message) {
+    showCard('<p class="v-badge v-badge-maybe">Throttled</p>' +
+      '<p class="j-verdict">Sorry for the delay</p>' +
+      '<p class="j-reason">' + window.Verdict.esc(message) + "</p>", "maybe");
+  }
+
   function toBase64(buf) {
     var bytes = new Uint8Array(buf);
     var out = "";
@@ -100,7 +108,9 @@
       });
       var data = await res.json().catch(function () { return {}; });
 
-      if (!res.ok || data.error) {
+      if (data.error === "rate") {
+        throttled(data.message || "One request a minute. Try again shortly.");
+      } else if (!res.ok || data.error) {
         fail(data.message || "The judge did not answer. Try again in a moment.");
       } else {
         var meta = data.model + " · " + window.Verdict.money(data.usage && data.usage.input_tokens) +

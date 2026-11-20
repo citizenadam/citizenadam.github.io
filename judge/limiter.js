@@ -1,9 +1,14 @@
-// One Durable Object per deployment, holding the counters in storage so they
-// survive eviction. KV was the wrong tool: it is eventually consistent, so two
-// requests a second apart could both pass the 60-second gap.
+// One Durable Object per deployment. The state lives in memory, loaded once at
+// construction, and is written back lazily: JavaScript here is single-threaded,
+// so the check-and-set below cannot interleave with another request. Storage
+// reads on every call were the reason a second request could slip through.
 export class Limiter {
   constructor(state) {
     this.state = state;
+    this.data = null;
+    state.blockConcurrencyWhile(async () => {
+      this.data = (await state.storage.get("state")) || null;
+    });
   }
 
   async fetch(request) {
@@ -11,38 +16,35 @@ export class Limiter {
     const today = new Date().toISOString().slice(0, 10);
     const now = Date.now();
 
-    let s = await this.state.storage.get("state");
-    if (!s || s.day !== today) {
-      s = { day: today, total: 0, perIp: {}, last: {} };
+    if (!this.data || this.data.day !== today) {
+      this.data = { day: today, total: 0, perIp: {}, last: {} };
     }
 
-    const lastAt = s.last[ip] || 0;
+    const lastAt = this.data.last[ip] || 0;
     if (now - lastAt < gapMs) {
       const wait = Math.ceil((gapMs - (now - lastAt)) / 1000);
       return Response.json({
         ok: false,
-        reason: `One request every ${Math.round(gapMs / 1000)} seconds. Try again in ${wait}s.`
+        reason: `Sorry for the delay. This tool is public and has no login, so it is heavily secured: one request every ${Math.round(gapMs / 1000)} seconds, which prevents somebody using it as a free source of unlimited AI at my cost. That limit is a small piece of the same cost control this page is about. Try again in ${wait}s.`
       });
     }
-    if (s.total >= dayCap) {
-      return Response.json({ ok: false, reason: "This page has reached its daily limit." });
+    if (this.data.total >= dayCap) {
+      return Response.json({ ok: false, reason: "This page has reached its daily limit. Sorry — a public endpoint with no login has to have a ceiling, or it is free AI at my cost." });
     }
-    const mine = s.perIp[ip] || 0;
-    if (mine >= ipCap) {
-      return Response.json({ ok: false, reason: "That is this visitor's limit for today." });
-    }
-
-    s.last[ip] = now;
-    s.perIp[ip] = mine + 1;
-    s.total += 1;
-
-    // Keep the maps from growing without bound.
-    if (Object.keys(s.perIp).length > 5000) {
-      s.perIp = {};
-      s.last = {};
+    if ((this.data.perIp[ip] || 0) >= ipCap) {
+      return Response.json({ ok: false, reason: "That is this visitor's limit for today. Sorry — that limit is what keeps a login-free tool affordable." });
     }
 
-    await this.state.storage.put("state", s);
+    this.data.last[ip] = now;
+    this.data.perIp[ip] = (this.data.perIp[ip] || 0) + 1;
+    this.data.total += 1;
+
+    if (Object.keys(this.data.perIp).length > 5000) {
+      this.data.perIp = {};
+      this.data.last = {};
+    }
+
+    this.state.storage.put("state", this.data);
     return Response.json({ ok: true });
   }
 }
