@@ -39,10 +39,20 @@ async function sha(input) {
 
 // Two limits: one per visitor per day, one global per day. With KV bound the
 // counters survive isolates; without it they are per-isolate best effort.
+// An IPv6 host is handed a /64, and privacy addressing rotates the last 64
+// bits per connection. Keying on the full address lets a browser walk around
+// the gap, so the key is the /64 itself.
+function addressKey(addr) {
+  if (!addr) return "unknown";
+  if (addr.indexOf(":") >= 0) return addr.split(":").slice(0, 4).join(":") + "::/64";
+  return addr;
+}
+
 async function limited(env, ip) {
   const gapMs = Number(env.MIN_GAP_MS || 60000);
   const ipCap = Number(env.IP_DAILY_CAP || 25);
   const dayCap = Number(env.DAILY_CAP || 400);
+  const globalPerMin = Number(env.GLOBAL_PER_MIN || 6);
 
   // A Durable Object is the only place here with strong consistency. It holds
   // the gap and the daily counters for the whole deployment.
@@ -50,7 +60,7 @@ async function limited(env, ip) {
   const res = await env.LIMITER.get(id).fetch("https://limiter/check", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ ip: await sha(ip || "unknown"), gapMs, ipCap, dayCap })
+    body: JSON.stringify({ ip: await sha(addressKey(ip)), gapMs, ipCap, dayCap, globalPerMin })
   });
   return res.json();
 }
