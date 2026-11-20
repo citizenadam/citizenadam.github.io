@@ -56,7 +56,8 @@
     drop.classList.add("has-file");
     drop.querySelector(".hire-drop-main").textContent = file.name;
     drop.querySelector(".hire-drop-sub").textContent =
-      Math.round(file.size / 1024) + " KB · click to replace";
+      (file.size < 1024 ? file.size + " bytes" : Math.round(file.size / 1024) + " KB") +
+      " · click to replace";
   }
 
   function acceptFile(f) {
