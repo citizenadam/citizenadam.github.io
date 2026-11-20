@@ -49,20 +49,21 @@
 
   function hasDoneThis(depth) {
     if (depth >= 1.7) return { word: "Yes, directly", cls: "ok" };
-    if (depth >= 1.1) return { word: "Partly, in adjacent work", cls: "mid" };
-    return { word: "No", cls: "no" };
+    if (depth >= 1.1) return { word: "Yes, closely related", cls: "mid" };
+    return { word: "Not on the record yet", cls: "no" };
   }
 
   function matchesExperience(gap) {
     if (gap >= 0.7) return { word: "Niche or targeted application", cls: "mid" };
-    if (gap >= 0.4) return { word: "Would need some time to onboard", cls: "mid" };
+    if (gap >= 0.4) return { word: "Would need some lead time", cls: "mid" };
     return { word: "Near perfect match", cls: "ok" };
   }
 
-  function biggerThanBefore(scale) {
-    if (scale >= 0.7) return { word: "Yes, noticeably", cls: "mid" };
-    if (scale >= 0.4) return { word: "About the same", cls: "ok" };
-    return { word: "No", cls: "ok" };
+  function rampUp(scale) {
+    if (scale >= 0.75) return { word: "Two to three months", cls: "mid" };
+    if (scale >= 0.55) return { word: "About a month", cls: "mid" };
+    if (scale >= 0.35) return { word: "About two weeks", cls: "ok" };
+    return { word: "Can start today", cls: "ok" };
   }
 
   function badge(tone) {
@@ -70,6 +71,16 @@
     if (tone === "no") return { text: "No", cls: "no" };
     return { text: "Maybe", cls: "maybe" };
   }
+
+  var LABELS = {
+    "Direct evidence": "Proven in this role",
+    "Evidenced": "Strong fit",
+    "Evidenced, with caveats": "Good fit, some ramp-up",
+    "Evidenced, but a named requirement is missing": "Strong fit, one thing to learn",
+    "Missing a named requirement": "Partial fit",
+    "Adjacent experience only": "Transferable experience",
+    "Not in the record": "Not evidenced"
+  };
 
   function row(label, value) {
     return '<div class="v-fact"><dt>' + esc(label) + "</dt>" +
@@ -80,12 +91,12 @@
     var b = badge(data.tone);
 
     var out = '<p class="v-badge v-badge-' + b.cls + '">' + esc(b.text) + "</p>";
-    out += '<p class="j-verdict">' + esc(data.verdict) + "</p>";
+    out += '<p class="j-verdict">' + esc(LABELS[data.verdict] || data.verdict) + "</p>";
 
     out += '<dl class="v-facts">';
     out += row("Has done this work", hasDoneThis(data.depth));
     out += row("Matches real world experience", matchesExperience(data.gap));
-    out += row("Bigger than anything done before", biggerThanBefore(data.scale_gap));
+    out += row("Ramp-up required", rampUp(data.scale_gap));
     out += "</dl>";
 
     out += cta(data.tone);
