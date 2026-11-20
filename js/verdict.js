@@ -48,16 +48,15 @@
   }
 
   function hasDoneThis(depth) {
-    if (depth >= 2.4) return { word: "Yes, directly", cls: "ok" };
-    if (depth >= 1.7) return { word: "Yes", cls: "ok" };
+    if (depth >= 1.7) return { word: "Yes, directly", cls: "ok" };
     if (depth >= 1.1) return { word: "Partly, in adjacent work", cls: "mid" };
     return { word: "No", cls: "no" };
   }
 
-  function asksForNew(gap) {
-    if (gap >= 0.7) return { word: "Yes, something specific", cls: "no" };
-    if (gap >= 0.4) return { word: "A little", cls: "mid" };
-    return { word: "Nothing beyond the record", cls: "ok" };
+  function matchesExperience(gap) {
+    if (gap >= 0.7) return { word: "Niche or targeted application", cls: "mid" };
+    if (gap >= 0.4) return { word: "Would need some time to onboard", cls: "mid" };
+    return { word: "Near perfect match", cls: "ok" };
   }
 
   function biggerThanBefore(scale) {
@@ -85,7 +84,7 @@
 
     out += '<dl class="v-facts">';
     out += row("Has done this work", hasDoneThis(data.depth));
-    out += row("Asks for something not on the record", asksForNew(data.gap));
+    out += row("Matches real world experience", matchesExperience(data.gap));
     out += row("Bigger than anything done before", biggerThanBefore(data.scale_gap));
     out += "</dl>";
 

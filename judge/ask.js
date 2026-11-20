@@ -40,46 +40,19 @@ async function sha(input) {
 // Two limits: one per visitor per day, one global per day. With KV bound the
 // counters survive isolates; without it they are per-isolate best effort.
 async function limited(env, ip) {
-  const day = new Date().toISOString().slice(0, 10);
+  const gapMs = Number(env.MIN_GAP_MS || 60000);
   const ipCap = Number(env.IP_DAILY_CAP || 25);
   const dayCap = Number(env.DAILY_CAP || 400);
-  const gapMs = Number(env.MIN_GAP_MS || 60000);
-  const tag = await sha(ip || "unknown");
 
-  // One request per 60 seconds per visitor. This is the throttle that matters:
-  // a script cannot walk the record any faster than a person can read it.
-  const lastKey = `last:${tag}`;
-  const last = env.RATE ? await env.RATE.get(lastKey) : memory.get(lastKey);
-  if (last && Date.now() - Number(last) < gapMs) {
-    const wait = Math.ceil((gapMs - (Date.now() - Number(last))) / 1000);
-    return { ok: false, reason: `One request every ${gapMs / 1000} seconds. Try again in ${wait}s.`, status: 429 };
-  }
-
-  if (env.RATE) {
-    const dayKey = `d:${day}`;
-    const ipKey = `i:${tag}:${day}`;
-    const [used, mine] = await Promise.all([env.RATE.get(dayKey), env.RATE.get(ipKey)]);
-    if (Number(used || 0) >= dayCap) return { ok: false, reason: "This page has answered its daily limit.", status: 429 };
-    if (Number(mine || 0) >= ipCap) return { ok: false, reason: "That is this visitor's limit for today.", status: 429 };
-
-    await Promise.all([
-      env.RATE.put(lastKey, String(Date.now()), { expirationTtl: 300 }),
-      env.RATE.put(dayKey, String(Number(used || 0) + 1), { expirationTtl: 172800 }),
-      env.RATE.put(ipKey, String(Number(mine || 0) + 1), { expirationTtl: 172800 })
-    ]);
-    return { ok: true };
-  }
-
-  const key = `${tag}:${day}`;
-  const mine = memory.get(key) || 0;
-  const total = memory.get("total:" + day) || 0;
-  if (total >= dayCap) return { ok: false, reason: "This page has answered its daily limit.", status: 429 };
-  if (mine >= ipCap) return { ok: false, reason: "That is this visitor's limit for today.", status: 429 };
-
-  memory.set(lastKey, Date.now());
-  memory.set(key, mine + 1);
-  memory.set("total:" + day, total + 1);
-  return { ok: true };
+  // A Durable Object is the only place here with strong consistency. It holds
+  // the gap and the daily counters for the whole deployment.
+  const id = env.LIMITER.idFromName("global");
+  const res = await env.LIMITER.get(id).fetch("https://limiter/check", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ ip: await sha(ip || "unknown"), gapMs, ipCap, dayCap })
+  });
+  return res.json();
 }
 
 export async function handle(request, env = {}) {
