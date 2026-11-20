@@ -36,9 +36,9 @@
     <a class="mark" href="/">AL<span class="mark-dot">.</span></a>
     <nav class="nav" aria-label="Sections">
       <a href="#hire">Hire?</a>
-      <a href="#bench">Bench</a>
-      <a href="#method">Method</a>
       <a href="#work">Work</a>
+      <a href="#about">What I do</a>
+      <a href="#bench">Bench</a>
       <a href="#contact">Contact</a>
       <a href="https://www.linkedin.com/in/paul-langmeyer-true" class="nav-ext" rel="me" target="_blank">LinkedIn</a>
     </nav>
@@ -98,92 +98,12 @@
   </div>
 </section>
 
-<section class="band" id="bench">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-num">02 — bench</p>
-      <h2>Same task. Same harness. Held-out tests.</h2>
-      <p class="sec-intro">Real-world AI task completion, measured with harnesses. Cost and wall-clock rank <em>only among valid completions</em>.</p>
-      <p class="bench-meta" id="bench-meta">Loading run data…</p>
-    </header>
 
-    <div class="atlas" id="atlas">
-      <div class="atlas-stage">
-        <canvas id="atlas-canvas" width="880" height="520" role="img" aria-label="Three-dimensional scatter plot of benchmark runs by cost, wall-clock time, and validity"></canvas>
-        <div class="atlas-tip" id="atlas-tip" hidden></div>
-        <p class="atlas-empty" id="atlas-empty" hidden>No runs recorded yet.</p>
-      </div>
-      <aside class="atlas-side">
-        <div class="atlas-legend" id="atlas-legend"></div>
-        <div class="atlas-axis-note">
-          <p><b>x</b> cost, list price of tokens consumed</p>
-          <p><b>y</b> wall-clock, model call to final edit</p>
-          <p><b>z</b> validity, every gate green</p>
-        </div>
-        <p class="atlas-hint">Drag to orbit. Scroll to zoom. Click a point.</p>
-      </aside>
-    </div>
-
-    <div class="findings" id="findings"></div>
-
-    <details class="table-wrap">
-      <summary>Run table</summary>
-      <table class="runs" id="runs-table">
-        <thead>
-          <tr><th>run</th><th>model</th><th>task</th><th>valid</th><th>gates failed</th><th>in</th><th>out</th><th>cost</th><th>wall</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </details>
-  </div>
-</section>
-
-<section class="band band-alt" id="method">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-num">03 — method</p>
-      <h2>Completion is mechanical, not a vibe</h2>
-      <p class="sec-intro">Human votes say whether an artifact is <em>good</em>. They cannot say whether it is <em>done</em>. Every gate below is a program you can read, run, and disagree with.</p>
-    </header>
-
-    <table class="gates">
-      <thead>
-        <tr><th>Gate</th><th>What it checks</th><th>Cheat it kills</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>G1</code> input seal</td><td>SHA-256 manifest of the fixture is captured before the run; the oracle re-reads the original, not the agent's copy.</td><td>Deleting or rewriting the source data.</td></tr>
-        <tr><td><code>G2</code> held-out oracle</td><td>Tests and expected answers are not in the agent's workspace. They run after the agent stops.</td><td>Editing the tests, hardcoding the visible expectations.</td></tr>
-        <tr><td><code>G3</code> coverage receipt</td><td>The deliverable must attest how many rows it processed. The oracle compares that count against ground truth.</td><td>Sampling a tenth of the data and calling it done.</td></tr>
-        <tr><td><code>G5</code> provenance</td><td>Test files byte-identical after the run. No build tags, no skips. The diff may not touch the oracle.</td><td>Disabling the check instead of fixing the code.</td></tr>
-        <tr><td><code>G7</code> leak scan</td><td>Output is scanned against fixture answer literals.</td><td>Copying the answer key into the report.</td></tr>
-      </tbody>
-    </table>
-
-    <p class="method-note-line">G4 (network egress inside the agent sandbox) and G6 (two-pass determinism) are specified and not yet enforced. Every run record lists exactly the gates that actually ran, so a missing gate is visible rather than assumed.</p>
-
-    <div class="method-notes">
-      <div>
-        <h3>What counts as cheating is a written contract</h3>
-        <p>Dropping rows to go faster fails <code>G3</code>. Adding an index to a slow query passes, because the contract is about the result, not the method. The task file states that boundary before the model sees anything.</p>
-      </div>
-      <div>
-        <h3>Reported separately, never blended</h3>
-        <p>Completion rate, cost per valid pass, median wall-clock, and gate-failure rate are four numbers. There is no composite score, because a composite score is where gaming hides.</p>
-      </div>
-      <div>
-        <h3>Votes are a different axis</h3>
-        <p>Blind pairwise votes answer whether a passing artifact is usable. They never rescue a failing run and never move the completion number.</p>
-      </div>
-    </div>
-
-    <p class="method-link"><a href="/bench/README.md">harness source</a> <a href="/data/bench/manifest.json">manifest.json</a> <a href="/data/bench/runs.jsonl">runs.jsonl</a> <a href="/data/bench/tasks.json">tasks.json</a> <a href="/llms.txt">llms.txt</a></p>
-  </div>
-</section>
 
 <section class="band" id="work">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-num">04 — work</p>
+      <p class="sec-num">02 — work</p>
       <h2>Three things that shipped and stayed up</h2>
     </header>
 
@@ -227,7 +147,7 @@
 <section class="band band-alt" id="about">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-num">05 — what I can do for you</p>
+      <p class="sec-num">03 — what I can do for you</p>
       <h2>Four things, with the numbers attached</h2>
       <p class="sec-intro">No adjectives where a figure will do. Each of these was delivered inside a budget, a team, and an availability target.</p>
     </header>
@@ -281,6 +201,88 @@
       <p><b>The stack I judge:</b> Go, TypeScript and React, Python, PostgreSQL and TimescaleDB, Kubernetes, Terraform, Flux, Prometheus and Grafana, and whichever model is cheapest for the task in front of it.</p>
       <p class="certs">AWS Solutions Architect – Associate · Certified Kubernetes Administrator · ITIL 4 Foundation</p>
     </div>
+  </div>
+</section>
+
+<section class="band band-alt" id="method">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">04 — method</p>
+      <h2>Completion is mechanical, not a vibe</h2>
+      <p class="sec-intro">Human votes say whether an artifact is <em>good</em>. They cannot say whether it is <em>done</em>. Every gate below is a program you can read, run, and disagree with.</p>
+    </header>
+
+    <table class="gates">
+      <thead>
+        <tr><th>Gate</th><th>What it checks</th><th>Cheat it kills</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>G1</code> input seal</td><td>SHA-256 manifest of the fixture is captured before the run; the oracle re-reads the original, not the agent's copy.</td><td>Deleting or rewriting the source data.</td></tr>
+        <tr><td><code>G2</code> held-out oracle</td><td>Tests and expected answers are not in the agent's workspace. They run after the agent stops.</td><td>Editing the tests, hardcoding the visible expectations.</td></tr>
+        <tr><td><code>G3</code> coverage receipt</td><td>The deliverable must attest how many rows it processed. The oracle compares that count against ground truth.</td><td>Sampling a tenth of the data and calling it done.</td></tr>
+        <tr><td><code>G5</code> provenance</td><td>Test files byte-identical after the run. No build tags, no skips. The diff may not touch the oracle.</td><td>Disabling the check instead of fixing the code.</td></tr>
+        <tr><td><code>G7</code> leak scan</td><td>Output is scanned against fixture answer literals.</td><td>Copying the answer key into the report.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="method-note-line">G4 (network egress inside the agent sandbox) and G6 (two-pass determinism) are specified and not yet enforced. Every run record lists exactly the gates that actually ran, so a missing gate is visible rather than assumed.</p>
+
+    <div class="method-notes">
+      <div>
+        <h3>What counts as cheating is a written contract</h3>
+        <p>Dropping rows to go faster fails <code>G3</code>. Adding an index to a slow query passes, because the contract is about the result, not the method. The task file states that boundary before the model sees anything.</p>
+      </div>
+      <div>
+        <h3>Reported separately, never blended</h3>
+        <p>Completion rate, cost per valid pass, median wall-clock, and gate-failure rate are four numbers. There is no composite score, because a composite score is where gaming hides.</p>
+      </div>
+      <div>
+        <h3>Votes are a different axis</h3>
+        <p>Blind pairwise votes answer whether a passing artifact is usable. They never rescue a failing run and never move the completion number.</p>
+      </div>
+    </div>
+
+    <p class="method-link"><a href="/bench/README.md">harness source</a> <a href="/data/bench/manifest.json">manifest.json</a> <a href="/data/bench/runs.jsonl">runs.jsonl</a> <a href="/data/bench/tasks.json">tasks.json</a> <a href="/llms.txt">llms.txt</a></p>
+  </div>
+</section>
+
+<section class="band" id="bench">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-num">05 — bench</p>
+      <h2>Same task. Same harness. Held-out tests.</h2>
+      <p class="sec-intro">Real-world AI task completion, measured with harnesses. Cost and wall-clock rank <em>only among valid completions</em>.</p>
+      <p class="bench-meta" id="bench-meta">Loading run data…</p>
+    </header>
+
+    <div class="atlas" id="atlas">
+      <div class="atlas-stage">
+        <canvas id="atlas-canvas" width="880" height="520" role="img" aria-label="Three-dimensional scatter plot of benchmark runs by cost, wall-clock time, and validity"></canvas>
+        <div class="atlas-tip" id="atlas-tip" hidden></div>
+        <p class="atlas-empty" id="atlas-empty" hidden>No runs recorded yet.</p>
+      </div>
+      <aside class="atlas-side">
+        <div class="atlas-legend" id="atlas-legend"></div>
+        <div class="atlas-axis-note">
+          <p><b>x</b> cost, list price of tokens consumed</p>
+          <p><b>y</b> wall-clock, model call to final edit</p>
+          <p><b>z</b> validity, every gate green</p>
+        </div>
+        <p class="atlas-hint">Drag to orbit. Scroll to zoom. Click a point.</p>
+      </aside>
+    </div>
+
+    <div class="findings" id="findings"></div>
+
+    <details class="table-wrap">
+      <summary>Run table</summary>
+      <table class="runs" id="runs-table">
+        <thead>
+          <tr><th>run</th><th>model</th><th>task</th><th>valid</th><th>gates failed</th><th>in</th><th>out</th><th>cost</th><th>wall</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </details>
   </div>
 </section>
 
