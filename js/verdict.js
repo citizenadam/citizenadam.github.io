@@ -66,10 +66,12 @@
     return { word: "Can start today", cls: "ok" };
   }
 
-  function badge(tone) {
-    if (tone === "yes") return { text: "Yes", cls: "yes" };
-    if (tone === "no") return { text: "No", cls: "no" };
-    return { text: "Maybe", cls: "maybe" };
+  // Two answers, not three. A "maybe" is a decision nobody can act on, so the
+  // badge is whether the record evidences the work: direct experience is a yes,
+  // everything short of it is a no, and the rows carry the nuance.
+  function badge(data) {
+    var yes = typeof data.depth === "number" ? data.depth >= 1.7 : data.tone === "yes";
+    return yes ? { text: "Yes", cls: "yes" } : { text: "No", cls: "no" };
   }
 
   var LABELS = {
@@ -88,7 +90,7 @@
   }
 
   function html(data, meta) {
-    var b = badge(data.tone);
+    var b = badge(data);
 
     var out = '<p class="v-badge v-badge-' + b.cls + '">' + esc(b.text) + "</p>";
     out += '<p class="j-verdict">' + esc(LABELS[data.verdict] || data.verdict) + "</p>";
@@ -99,7 +101,7 @@
     out += row("Ramp-up required", rampUp(data.scale_gap));
     out += "</dl>";
 
-    out += cta(data.tone);
+    out += cta(b.cls === "yes" ? "yes" : "no");
 
     // The raw numbers stay available, one click down, for anyone auditing it.
     out += '<details class="v-math"><summary>The numbers behind this</summary>';
@@ -126,6 +128,10 @@
     html: html,
     esc: esc,
     money: money,
-    toneClass: function (tone) { return "judge-result tone-" + (tone || "maybe"); }
+    binary: badge,
+    toneClass: function (data) {
+      var t = typeof data === "string" ? data : badge(data || {}).cls;
+      return "judge-result tone-" + t;
+    }
   };
 })();

@@ -76,7 +76,7 @@
     var meta = "judged " + data.generated_at.slice(0, 10) + " · " +
       window.Verdict.money(data.tokens_used / data.roles.length) + " of tokens · " + data.model;
     showCard('<p class="j-prompt">' + window.Verdict.esc(role.requirement) + "</p>" +
-      window.Verdict.html(role, meta), role.tone);
+      window.Verdict.html(role, meta), role);
   }
 
   async function submit(event) {
