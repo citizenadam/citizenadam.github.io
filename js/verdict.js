@@ -54,7 +54,7 @@
   }
 
   function matchesExperience(gap) {
-    if (gap >= 0.7) return { word: "Yes direct development or implementation", cls: "mid" };
+    if (gap >= 0.7) return { word: "Niche or targeted applications", cls: "mid" };
     if (gap >= 0.4) return { word: "Would need some lead time", cls: "mid" };
     return { word: "Near perfect match", cls: "ok" };
   }
