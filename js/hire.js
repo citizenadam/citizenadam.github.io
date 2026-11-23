@@ -1,5 +1,5 @@
-// The headline panel. Two ways in: a role from the precomputed set, or a real
-// posting — pasted as text or dropped as a PDF/Word file and read on the server.
+// The headline panel. Two ways in: a role from the precomputed set, or one
+// box that takes pasted text, a bare link, or a dropped file.
 (function () {
   "use strict";
 
@@ -45,19 +45,21 @@
     return btoa(out);
   }
 
+  // One box for all three. Typed text wins; a dropped file stages until
+  // typing replaces it. Anything staged shows in the box foot.
   function describeFile() {
-    var drop = el("hire-drop");
+    var box = el("hire-box");
+    var hint = el("hire-hint");
     if (!file) {
-      drop.classList.remove("has-file");
-      drop.querySelector(".hire-drop-main").textContent = "Drop a PDF, Word or text file here";
-      drop.querySelector(".hire-drop-sub").textContent = "or click to choose one · up to 4 MB";
+      box.classList.remove("has-file");
+      hint.innerHTML = "Drop a doc, PDF or text file here or " +
+        '<button type="button" class="hire-link" id="hire-choose">choose one</button> · up to 4 MB';
       return;
     }
-    drop.classList.add("has-file");
-    drop.querySelector(".hire-drop-main").textContent = file.name;
-    drop.querySelector(".hire-drop-sub").textContent =
+    box.classList.add("has-file");
+    hint.innerHTML = window.Verdict.esc(file.name) + " · " +
       (file.size < 1024 ? file.size + " bytes" : Math.round(file.size / 1024) + " KB") +
-      " · click to replace";
+      ' · <button type="button" class="hire-link" id="hire-clear">remove</button>';
   }
 
   function acceptFile(f) {
@@ -92,7 +94,7 @@
     var endpoint = el("hire-form").dataset.endpoint;
 
     if (!text && !file) {
-      status("Paste the requirements, a link to them, or drop a file first.");
+      status("Paste a position description or URL, or drop a file in the box first.");
       return;
     }
 
@@ -168,36 +170,63 @@
     var form = el("hire-form");
     form.addEventListener("submit", submit);
 
-    var drop = el("hire-drop");
+    var box = el("hire-box");
     var input = el("hire-file");
+    var text = el("hire-text");
 
-    drop.addEventListener("click", function () { input.click(); });
-    drop.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+    describeFile();
+
+    el("hire-foot").addEventListener("click", function (e) {
+      if (!e.target) return;
+      if (e.target.id === "hire-choose") input.click();
+      if (e.target.id === "hire-clear") {
+        file = null;
+        input.value = "";
+        describeFile();
+        status("");
+      }
     });
-    input.addEventListener("change", function () { acceptFile(input.files[0]); });
+    input.addEventListener("change", function () {
+      acceptFile(input.files[0]);
+      input.value = "";
+    });
+
+    // Typing replaces a staged file: whatever is in the box is the input.
+    text.addEventListener("input", function () {
+      if (file && text.value.trim()) {
+        file = null;
+        describeFile();
+      }
+    });
+
+    function hasFiles(e) {
+      return e.dataTransfer && e.dataTransfer.types &&
+        Array.prototype.indexOf.call(e.dataTransfer.types, "Files") >= 0;
+    }
 
     ["dragenter", "dragover"].forEach(function (name) {
-      drop.addEventListener(name, function (e) {
+      box.addEventListener(name, function (e) {
+        if (!hasFiles(e)) return;
         e.preventDefault();
-        drop.classList.add("dragging");
+        box.classList.add("dragging");
       });
     });
     ["dragleave", "drop"].forEach(function (name) {
-      drop.addEventListener(name, function (e) {
+      box.addEventListener(name, function (e) {
+        if (!hasFiles(e)) return;
         e.preventDefault();
-        drop.classList.remove("dragging");
+        box.classList.remove("dragging");
       });
     });
-    drop.addEventListener("drop", function (e) {
-      var dropped = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-      acceptFile(dropped);
+    box.addEventListener("drop", function (e) {
+      if (!hasFiles(e)) return;
+      acceptFile(e.dataTransfer.files[0]);
     });
 
     // A posting dropped anywhere on the panel should land in the same place.
     form.addEventListener("dragover", function (e) { e.preventDefault(); });
     form.addEventListener("drop", function (e) {
-      if (e.target.closest && e.target.closest("#hire-drop")) return;
+      if (e.target.closest && e.target.closest("#hire-box")) return;
       e.preventDefault();
       var dropped = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
       acceptFile(dropped);

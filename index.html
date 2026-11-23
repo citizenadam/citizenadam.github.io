@@ -13,7 +13,7 @@
 <meta property="og:title" content="Adam Langmeyer — enterprise IT, production AI">
 <meta property="og:description" content="A benchmark with mechanical completion gates: same task, same sandbox, same hidden tests. Cost and time rank only among valid runs.">
 <meta property="og:url" content="https://citizenadam.github.io/">
-<link rel="stylesheet" href="/css/site.css?v=20261122b">
+<link rel="stylesheet" href="/css/site.css?v=20261123a">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -68,14 +68,14 @@
 
       <form class="hire-input" id="hire-form" data-endpoint="https://hire-judge.adamarash.workers.dev">
         <label class="hire-label" for="hire-text">Paste the requirements or the whole posting</label>
-        <textarea id="hire-text" rows="6" maxlength="12000"
-          placeholder="Paste a position description or a URL to one here, or drop a doc, PDF or text file below."></textarea>
-
-        <div class="hire-drop" id="hire-drop" tabindex="0" role="button"
-             aria-label="Upload a posting. Drop a PDF, Word or text file here, or press Enter to choose a file.">
+        <div class="hire-box" id="hire-box">
+          <textarea id="hire-text" rows="6" maxlength="12000"
+            placeholder="Paste a position description or a URL to one here, or drop a doc, PDF or text file."
+            aria-label="Paste a position description or a URL, or drop a file"></textarea>
           <input type="file" id="hire-file" accept=".pdf,.docx,.txt,.md" hidden>
-          <p class="hire-drop-main">Drop a PDF, Word or text file here</p>
-          <p class="hire-drop-sub">or click to choose one · up to 4 MB</p>
+          <div class="hire-box-foot" id="hire-foot">
+            <span class="hire-box-hint" id="hire-hint"></span>
+          </div>
         </div>
 
         <div class="hire-actions">
@@ -297,7 +297,7 @@
 
 <script src="/js/contact.js?v=20261121a" defer></script>
 <script src="/js/verdict.js?v=20261122c" defer></script>
-<script src="/js/hire.js?v=20261122b" defer></script>
+<script src="/js/hire.js?v=20261123a" defer></script>
 <script src="/js/atlas.js?v=20261121a" defer></script>
 <script src="/js/site.js?v=20261121a" defer></script>
 </body>
