@@ -118,6 +118,34 @@ function inputError(message, status = 400) {
   return err;
 }
 
+// Boards verified to serve a bot check instead of the posting to
+// server-side fetches (Indeed and Glassdoor return a 403 challenge page;
+// LinkedIn rate-limits). There is no header or trick that gets past them:
+// the only way in is a real browser, so the page says so and asks for
+// pasted text instead of dressing the failure up.
+const WALL_NAMES = [
+  ["indeed.", "Indeed"],
+  ["glassdoor.", "Glassdoor"],
+  ["linkedin.", "LinkedIn"]
+];
+
+const CHALLENGE_RE = /security check|captcha|verify you are (a )?human|unusual traffic|access denied|request blocked|perimeterx|datadome|just a moment|security\s*\|/i;
+
+function wallName(host) {
+  for (const [frag, name] of WALL_NAMES) {
+    if (host.toLowerCase().includes(frag)) return name;
+  }
+  return null;
+}
+
+function wallError(host) {
+  const name = wallName(host);
+  const who = name ? `${name} showed a bot check` : "That site showed a bot check";
+  return inputError(
+    `${who} instead of the posting, so it can't be fetched from here. Open the page in your browser, copy the job description, and paste the text into the box.`
+  );
+}
+
 function decodeEntities(s) {
   return s
     .replace(/&#x([0-9a-fA-F]{1,6});/g, (_, h) => {
@@ -204,6 +232,21 @@ export async function urlToText(rawUrl, fetchFn = fetch) {
   }
 
   if (!res.ok) {
+    // A bot wall usually arrives as the status, so peek at the body before
+    // reporting it: a challenge page gets the honest message, anything else
+    // gets the status.
+    let challenge = !!wallName(url.hostname) && (res.status === 403 || res.status === 429);
+    if (!challenge) {
+      try {
+        const peek = new TextDecoder("utf-8", { fatal: false }).decode(
+          (await res.clone().arrayBuffer()).slice(0, 65536)
+        );
+        challenge = CHALLENGE_RE.test(peek);
+      } catch {
+        challenge = false;
+      }
+    }
+    if (challenge) throw wallError(url.hostname);
     throw inputError(`That link returned ${res.status}. Check it opens in a browser first.`);
   }
 
@@ -235,6 +278,7 @@ export async function urlToText(rawUrl, fetchFn = fetch) {
     .trim();
 
   if (text.length < 8) {
+    if (CHALLENGE_RE.test(raw)) throw wallError(url.hostname);
     throw inputError("That page had no readable posting text.");
   }
   return text;
