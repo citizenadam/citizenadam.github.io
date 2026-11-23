@@ -7,6 +7,7 @@
 import { loadState } from "./state.mjs";
 import { QUESTIONS, MODEL, buildRequest, decide } from "./questions.mjs";
 import { fileToText } from "./extract.mjs";
+import { urlToText } from "./url-extract.mjs";
 
 const MAX_INPUT = 12000;
 const DEFAULT_ORIGIN = "https://citizenadam.github.io";
@@ -87,7 +88,7 @@ export async function handle(request, env = {}) {
 
   let requirement = String(body.requirement || "").trim();
 
-  // A pasted posting and an uploaded one take the same path from here.
+  // A pasted posting, a link, and an uploaded file take the same path from here.
   if (requirement.length < 8 && body.file && body.file.data) {
     try {
       requirement = (await fileToText(body.file.name, body.file.data)).replace(/[ \t]+/g, " ").trim();
@@ -96,8 +97,18 @@ export async function handle(request, env = {}) {
     }
   }
 
+  // A link is fetched once, server-side, and only its visible text is kept:
+  // markup, scripts, and styles are stripped, nothing executes.
+  if (requirement.length < 8 && body.url) {
+    try {
+      requirement = (await urlToText(String(body.url))).replace(/[ \t]+/g, " ").trim();
+    } catch (err) {
+      return reply({ error: "url", message: err.message || "That link could not be read." }, err.status || 400, origin, env);
+    }
+  }
+
   if (requirement.length < 8) {
-    return reply({ error: "input", message: "Paste the requirements or drop a PDF, DOCX or text file." }, 400, origin, env);
+    return reply({ error: "input", message: "Paste the requirements, paste a link to the posting, or drop a PDF, DOCX or text file." }, 400, origin, env);
   }
   if (requirement.length > MAX_INPUT) {
     return reply(
