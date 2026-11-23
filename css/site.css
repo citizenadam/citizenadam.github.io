@@ -489,18 +489,7 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
 }
 #hire-text:focus { outline: none; border-color: var(--accent); }
 
-.hire-url-label { margin-top: 16px; }
-#hire-url {
-  width: 100%;
-  background: var(--bg); color: var(--ink); border: 1px solid var(--line-2);
-  padding: 11px 13px; font-family: var(--mono); font-size: 13px; line-height: 1.5;
-}
-#hire-url:focus { outline: none; border-color: var(--accent); }
-#hire-url::placeholder { color: var(--ink-3); }
-.hire-hint {
-  margin-top: 8px; font-family: var(--mono); font-size: 10.5px;
-  color: var(--ink-3); line-height: 1.6;
-}
+
 
 .hire-drop {
   margin-top: 12px; border: 1px dashed var(--line-2); background: var(--bg);

@@ -98,10 +98,12 @@ export async function handle(request, env = {}) {
   }
 
   // A link is fetched once, server-side, and only its visible text is kept:
-  // markup, scripts, and styles are stripped, nothing executes.
-  if (requirement.length < 8 && body.url) {
+  // markup, scripts, and styles are stripped, nothing executes. The box holds
+  // one input, so a paste that is nothing but a link is a link to fetch.
+  const pastedUrl = body.url || (/^https?:\/\/\S+$/i.test(requirement) && requirement.length <= 2048 ? requirement : "");
+  if (pastedUrl) {
     try {
-      requirement = (await urlToText(String(body.url))).replace(/[ \t]+/g, " ").trim();
+      requirement = (await urlToText(String(pastedUrl))).replace(/[ \t]+/g, " ").trim();
     } catch (err) {
       return reply({ error: "url", message: err.message || "That link could not be read." }, err.status || 400, origin, env);
     }

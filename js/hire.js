@@ -68,8 +68,6 @@
     }
     file = f;
     el("hire-text").value = "";
-    var urlInput = el("hire-url");
-    if (urlInput) urlInput.value = "";
     describeFile();
     status("");
   }
@@ -81,42 +79,31 @@
       window.Verdict.html(role, meta), role);
   }
 
+  // A bare link in the box is a link to fetch: the server fetches it once,
+  // text only, and judges what it finds. Anything else is judged as pasted.
+  function looksLikeLink(text) {
+    return /^https?:\/\/\S+$/i.test(text) && text.length <= 2048;
+  }
+
   async function submit(event) {
     event.preventDefault();
     var button = el("hire-submit");
     var text = el("hire-text").value.trim();
-    var urlInput = el("hire-url");
-    var url = urlInput ? urlInput.value.trim() : "";
     var endpoint = el("hire-form").dataset.endpoint;
 
-    if (!text && !url && !file) {
-      status("Paste the requirements, paste a link, or drop a file first.");
+    if (!text && !file) {
+      status("Paste the requirements, a link to them, or drop a file first.");
       return;
-    }
-
-    if (url && !text) {
-      try {
-        var parsed = new URL(url);
-        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-          status("That link needs to start with http:// or https://.");
-          return;
-        }
-      } catch (err) {
-        status("That link could not be parsed. It needs to start with http:// or https://.");
-        return;
-      }
     }
 
     button.disabled = true;
     button.textContent = "Judging…";
-    status(text ? "Reading the posting…" : url ? "Reading the link…" : "Reading " + file.name + "…");
+    status(file && !text ? "Reading " + file.name + "…" : looksLikeLink(text) ? "Reading the link…" : "Reading the posting…");
 
     try {
       var body;
       if (text) {
-        body = { requirement: text };
-      } else if (url) {
-        body = { url: url };
+        body = looksLikeLink(text) ? { url: text } : { requirement: text };
       } else {
         body = { file: { name: file.name, data: toBase64(await file.arrayBuffer()) } };
       }
@@ -176,18 +163,6 @@
         window.Verdict.money(data.tokens_used) + " in total.";
     } else {
       chips.innerHTML = '<span class="hire-loading">Role set unavailable; paste a posting below.</span>';
-    }
-
-    var urlInput = el("hire-url");
-    if (urlInput) {
-      // A link and a file are alternatives; the typed link wins, so a stale
-      // file choice is dropped the moment a link is entered.
-      urlInput.addEventListener("input", function () {
-        if (urlInput.value.trim() && file) {
-          file = null;
-          describeFile();
-        }
-      });
     }
 
     var form = el("hire-form");
