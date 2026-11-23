@@ -124,6 +124,10 @@
       } else {
         var meta = data.model + " · " + window.Verdict.money(data.usage && data.usage.input_tokens) +
           " of tokens · record " + data.state_revision;
+        if (data.posting && data.posting.kept < data.posting.original) {
+          meta += " · read " + data.posting.kept.toLocaleString() + " of " +
+            data.posting.original.toLocaleString() + " characters, the rest was boilerplate";
+        }
         showCard(window.Verdict.html(data, meta), data.tone);
       }
     } catch (err) {

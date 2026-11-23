@@ -7,6 +7,7 @@
 import { loadState } from "./state.mjs";
 import { QUESTIONS, MODEL, buildRequest, decide } from "./questions.mjs";
 import { fileToText } from "./extract.mjs";
+import { trimPosting } from "./trim.js";
 import { urlToText } from "./url-extract.mjs";
 
 const MAX_INPUT = 12000;
@@ -112,6 +113,19 @@ export async function handle(request, env = {}) {
   if (requirement.length < 8) {
     return reply({ error: "input", message: "Paste the requirements, paste a link to the posting, or drop a PDF, DOCX or text file." }, 400, origin, env);
   }
+
+  // A pasted posting carries the company's mission statement, benefits, EEO
+  // notice, arbitration agreement and the application form. Keep the sections
+  // that describe the work, then check the length of what is left.
+  const posting = { original: requirement.length, kept: requirement.length, sections: [] };
+  if (requirement.length > 800) {
+    const trimmed = trimPosting(requirement, MAX_INPUT);
+    if (trimmed.text.length >= 120) {
+      requirement = trimmed.text;
+      posting.kept = trimmed.kept;
+      posting.sections = trimmed.sections;
+    }
+  }
   if (requirement.length > MAX_INPUT) {
     return reply(
       { error: "input", message: `That is ${requirement.length} characters; the limit is ${MAX_INPUT}. Trim the posting to the requirements section.` },
@@ -159,6 +173,8 @@ export async function handle(request, env = {}) {
       ...judged,
       model: data.model,
       usage: data.usage,
+      posting,
+      posting,
       state_revision: await sha(JSON.stringify(loadState(env)))
     },
     200, origin, env

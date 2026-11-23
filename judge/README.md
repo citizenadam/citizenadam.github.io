@@ -58,3 +58,17 @@ requirement go beyond what the record states?"* — a stretch check. Jev answere
 record covers directly. A saturated question carries no information, so it was
 removed rather than thresholded around. The named-tool gap and the scale gap
 replaced it, and those do discriminate: 0.07 against 0.99 on the same set.
+
+## Trimming a pasted posting
+
+A real posting arrives with a mission statement, benefits, an EEO notice, an
+arbitration agreement and the application form attached — 15,000 characters
+where 3,000 describe the work. `trim.js` recognises sections by name
+(`key responsibilities`, `minimum qualifications`, `preferred qualifications`,
+`what you'll do`, `expectations`, `about the role`) and keeps only those,
+dropping every other section and any boilerplate paragraph inside a kept one.
+
+Recognition is by heading name, never by shape: "Next-generation sequencing
+library preparation experience" looks like a heading and is a requirement, so
+an unrecognised line stays body text. Every answer reports what it actually
+read: `posting: { original, kept, sections }`.
